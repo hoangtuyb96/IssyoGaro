@@ -1,0 +1,76 @@
+# This is the configuration used to check the rubocop source code.
+
+inherit_from:
+  - .rubocop_todo.yml
+  - .rubocop_excepted.yml
+
+AllCops:
+  Exclude:
+    - "vendor/**/*"
+    - "spec/fixtures/**/*"
+    - "tmp/**/*"
+    - "config/**/*"
+    - ".git/**/*"
+    - "bin/**/*"
+    - "Gemfile"
+    - "test/*"
+    - "db/*"
+    - "Rakefile"
+  TargetRubyVersion: 2.3
+
+Documentation:
+  Enabled: false
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+Layout/ClassStructure:
+  Enabled: true
+  Categories:
+    module_inclusion:
+      - include
+      - prepend
+      - extend
+  ExpectedOrder:
+      - module_inclusion
+      - constants
+      - public_class_methods
+      - initializer
+      - instance_methods
+      - protected_methods
+      - private_methods
+
+# Trailing white space is meaningful in code examples
+Layout/TrailingWhitespace:
+  AllowInHeredoc: true
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*.rb"
+
+Lint/InterpolationCheck:
+  Exclude:
+    - "spec/**/*.rb"
+
+Lint/UselessAccessModifier:
+  MethodCreatingMethods:
+    - "def_matcher"
+    - "def_node_matcher"
+
+Lint/BooleanSymbol:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "**/*.rake"
+    - "spec/**/*.rb"
+    - "**/*.gemspec"
+
+Metrics/ClassLength:
+  Exclude:
+    - lib/rubocop/config_obsoletion.rb
+
+Metrics/ModuleLength:
+  Exclude:
+    - "spec/**/*.rb"
