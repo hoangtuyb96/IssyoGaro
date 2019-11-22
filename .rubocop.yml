@@ -75,3 +75,11 @@ Metrics/ClassLength:
 Metrics/ModuleLength:
   Exclude:
     - "spec/**/*.rb"
+
+Naming/AccessorMethodName:
+  Exclude:
+    - "app/models/serializers/base_serializer.rb"
+
+Metrics/ClassLength:
+  Exclude:
+    - "app/models/serializers/base_serializer.rb"
