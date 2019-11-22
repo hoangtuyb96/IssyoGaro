@@ -14,8 +14,9 @@ AllCops:
     - "bin/**/*"
     - "Gemfile"
     - "test/*"
-    - "db/*"
+    - "db/**/*"
     - "Rakefile"
+    - "app/channels/**/*"
   TargetRubyVersion: 2.3
 
 Documentation:

@@ -1,2 +1,10 @@
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+Layout/AlignArguments:
+  EnforcedStyle: with_fixed_indentation
