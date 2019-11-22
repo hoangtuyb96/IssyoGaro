@@ -71,15 +71,12 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - lib/rubocop/config_obsoletion.rb
+    - "app/models/serializers/base_serializer.rb"
 
 Metrics/ModuleLength:
   Exclude:
     - "spec/**/*.rb"
 
 Naming/AccessorMethodName:
-  Exclude:
-    - "app/models/serializers/base_serializer.rb"
-
-Metrics/ClassLength:
   Exclude:
     - "app/models/serializers/base_serializer.rb"

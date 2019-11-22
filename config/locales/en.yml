@@ -33,6 +33,7 @@ en:
   api:
     missing_params: "Missing parameter"
     invalid_token: "Invalid token"
+    not_permission: "You have not permission to access"
   users:
     show:
       success: "Show user success"
@@ -42,3 +43,5 @@ en:
     create:
       success: "Create group successful"
       fail: "Create group fail"
+    update:
+      success: "Update group successful"
