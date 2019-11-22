@@ -1,5 +1,5 @@
 class Group < ApplicationRecord
-  ATTRIBUTES_PARAMS = %i[name description cover category_id is_public]
+  ATTRIBUTES_PARAMS = %i[name description cover category_id is_public].freeze
 
   belongs_to :category, optional: true
 

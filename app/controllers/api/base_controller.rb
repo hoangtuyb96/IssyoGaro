@@ -41,4 +41,10 @@ class Api::BaseController < ActionController::API
       messages: I18n.t("api.invalid_token")
     }, status: 404
   end
+
+  def require_permission
+    render json: {
+      messages: I18n.t("api.not_permission")
+    }, status: 401
+  end
 end

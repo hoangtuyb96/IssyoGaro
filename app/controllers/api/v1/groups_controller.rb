@@ -1,13 +1,26 @@
 class Api::V1::GroupsController < Api::BaseController
-  before_action :ensure_parameters_exist, only: :create
+  before_action :ensure_parameters_exist, only: %i[create update]
+  before_action :find_object, only: :update
 
   def create
     @group = Group.new group_params
     if group.save
       create_user_group
-      create_successfully
+      action_successfully "create"
     else
-      create_fail
+      action_fail
+    end
+  end
+
+  def update
+    if UserGroup.search_role(current_user.id, group.id).take&.role.equal? 3
+      if group.update_attributes group_params
+        action_successfully "update"
+      else
+        action_fail
+      end
+    else
+      require_permission
     end
   end
 
@@ -27,19 +40,19 @@ class Api::V1::GroupsController < Api::BaseController
     ).perform
   end
 
-  def create_fail
+  def action_successfully(action)
     render json: {
-      messages: group.errors.messages
-    }, status: 401
-  end
-
-  def create_successfully
-    render json: {
-      messages: I18n.t("groups.create.success"),
-      data: { 
+      messages: I18n.t("groups." + action + ".success"),
+      data: {
         group: Serializers::Groups::GroupSerializer
           .new(object: group).serializer
       }
     }, status: 200
+  end
+
+  def action_fail
+    render json: {
+      messages: group.errors.messages
+    }, status: 401
   end
 end
