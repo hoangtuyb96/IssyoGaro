@@ -38,3 +38,7 @@ en:
       success: "Show user success"
     messages:
       user_not_found: "User not found"
+  groups:
+    create:
+      success: "Create group successful"
+      fail: "Create group fail"
