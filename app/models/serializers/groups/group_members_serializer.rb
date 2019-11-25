@@ -1,8 +1,9 @@
-class Serializers::Groups::GroupMembersSerializer < Serializers::SupportSerializer
+class Serializers::Groups::GroupMembersSerializer <
+  Serializers::SupportSerializer
   attrs :id, :name, :description, :cover, :users
 
   def users
-    Serializers::Users::MemberGroupSerializer
-      .new(object: object.users).serializer
+    Serializers::UserGroups::UserGroupsIndexSerializer
+      .new(object: object.user_groups).serializer
   end
 end

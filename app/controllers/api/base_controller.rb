@@ -48,9 +48,11 @@ class Api::BaseController < ActionController::API
     }, status: 401
   end
 
-  def check_permission_of group_id, role
+  # rubucop:disable Metrics/MethodLength
+  def check_permission_of(group_id, role)
     cur_role = current_user.user_groups.where(group_id: group_id).take
     return false unless cur_role.present?
+
     cur_role =
       case cur_role.role
       when 1
@@ -62,4 +64,5 @@ class Api::BaseController < ActionController::API
       end
     cur_role.eql? role
   end
+  # rubucop:enable Metrics/MethodLength
 end
