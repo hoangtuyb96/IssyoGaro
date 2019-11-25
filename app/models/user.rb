@@ -39,15 +39,4 @@ class User < ApplicationRecord
     token = User.generate_unique_secure_token
     update_attributes authentication_token: token
   end
-
-  def role? group_id
-    case self.user_groups.where(group_id: group_id).take.role
-    when 1
-      "user"
-    when 2
-      "admin"
-    when 3
-      "first_admin"
-    end
-  end
 end

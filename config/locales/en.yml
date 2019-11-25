@@ -49,6 +49,8 @@ en:
     create:
       success: "You have joined %{group_name} group"
       joined: "You already joined %{group_name} group"
+    update:
+      change_permission: "Change permission successful"
     destroy:
       success: "You have left group"
       fail: "You can't leave %{group_name} now. Please try again"

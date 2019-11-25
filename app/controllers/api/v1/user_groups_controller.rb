@@ -1,7 +1,7 @@
 class Api::V1::UserGroupsController < Api::BaseController
   before_action :ensure_parameters_exist, only: :create
   before_action :find_role, only: :create
-  before_action :find_object, only: :destroy
+  before_action :find_object, only: %i[update destroy]
 
   def create
     if permission? params[:user_group][:user_id].to_i
@@ -10,6 +10,15 @@ class Api::V1::UserGroupsController < Api::BaseController
       else
         handle_joind_group
       end
+    else
+      require_permission
+    end
+  end
+
+  def update
+    if check_permission_of(user_group.group_id, "first_admin")
+      @group_root = Group.find_by id: user_group.group_id
+      change_permission
     else
       require_permission
     end
@@ -81,5 +90,24 @@ class Api::V1::UserGroupsController < Api::BaseController
     else
       join_group_fail
     end
+  end
+
+  def change_permission
+    if user_group.role.eql? 2
+      user_group.update_attributes role: 1
+    else
+      user_group.update_attributes role: 2
+    end
+    render_all_member_in_group
+  end
+
+  def render_all_member_in_group
+    render json: {
+      data: {
+        messages: I18n.t("user_groups.update.change_permission"),
+        group: Serializers::Groups::GroupMembersSerializer
+          .new(object: @group_root).serializer
+      }
+    }, status: 200
   end
 end
