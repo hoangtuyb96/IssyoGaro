@@ -11,6 +11,6 @@ namespace :api, defaults: {format: "json"} do
     constraints: ApiConstraints.new(version:1, default: true) do
       resources :users, only: :show
       resources :groups, only: %i[create update]
-      resources :user_groups, only: :create
+      resources :user_groups, only: %i[create destroy]
     end
 end
