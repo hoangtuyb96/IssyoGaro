@@ -1,4 +1,6 @@
 class UserGroup < ApplicationRecord
+  ATTRIBUTES_PARAMS = %i[user_id group_id].freeze
+
   belongs_to :user
   belongs_to :group
 
