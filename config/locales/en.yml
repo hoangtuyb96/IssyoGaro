@@ -45,3 +45,7 @@ en:
       fail: "Create group fail"
     update:
       success: "Update group successful"
+  user_groups:
+    create:
+      success: "You have joined group"
+      joined: "You already joined this group"
