@@ -47,5 +47,10 @@ en:
       success: "Update group successful"
   user_groups:
     create:
-      success: "You have joined group"
-      joined: "You already joined this group"
+      success: "You have joined %{group_name} group"
+      joined: "You already joined %{group_name} group"
+    destroy:
+      success: "You have left group"
+      fail: "You can't leave %{group_name} now. Please try again"
+    messages:
+      user_group_not_found: "You have not yet joined this group"
