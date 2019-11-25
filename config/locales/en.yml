@@ -56,3 +56,6 @@ en:
       fail: "You can't leave %{group_name} now. Please try again"
     messages:
       user_group_not_found: "You have not yet joined this group"
+  goals:
+    create:
+      success: "Create goal successful"
