@@ -47,4 +47,19 @@ class Api::BaseController < ActionController::API
       messages: I18n.t("api.not_permission")
     }, status: 401
   end
+
+  def check_permission_of group_id, role
+    cur_role = current_user.user_groups.where(group_id: group_id).take
+    return false unless cur_role.present?
+    cur_role =
+      case cur_role.role
+      when 1
+        "user"
+      when 2
+        "admin"
+      when 3
+        "first_admin"
+      end
+    cur_role.eql? role
+  end
 end
