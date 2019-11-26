@@ -76,4 +76,9 @@ en:
     create:
       success: "Invite success"
       invited: "You already invite %{user_name}"
-
+  user_tasks:
+    messages:
+      cant_evaluate_self: "You can't evaluate yourself"
+      join_goal_first: "You need to join this goal first"
+    update:
+      success: "Evaluate success"
