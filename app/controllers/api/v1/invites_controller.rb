@@ -45,7 +45,7 @@ class Api::V1::InvitesController < Api::BaseController
       group_id: params[:group_id])
     render json: {
       messages: I18n.t("invites.create.invited",
-        user_name: user(params[:user_id])),
+        user_name: user(params[:user_id]).name),
       data: { group: Serializers::Groups::GroupSerializer
         .new(object: group(params[:group_id])) }
     }, data: 409

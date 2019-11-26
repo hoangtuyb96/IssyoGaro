@@ -18,5 +18,6 @@ namespace :api, defaults: {format: "json"} do
       end
       resources :user_groups, only: %i[create update destroy]
       resources :invites, only: :create
+      get "home", to: "home_pages#index"
     end
 end
