@@ -73,7 +73,7 @@ class Api::V1::UserGroupsController < Api::BaseController
 
   def join_group_fail
     render json: {
-      messages: users_group.errors.messages
+      messages: user_group.errors.messages
     }, status: 422
   end
 
