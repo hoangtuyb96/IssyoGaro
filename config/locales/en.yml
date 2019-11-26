@@ -41,6 +41,8 @@ en:
     messages:
       user_not_found: "User not found"
   groups:
+    show:
+      success: "Group %{group_name} has shown"
     create:
       success: "Create group successful"
       fail: "Create group fail"
@@ -58,6 +60,8 @@ en:
     messages:
       user_group_not_found: "You have not yet joined this group"
   goals:
+    show:
+      success: "%{goal_name} has shown"
     create:
       success: "Create goal successful"
   user_goals:

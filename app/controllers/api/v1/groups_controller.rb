@@ -1,6 +1,20 @@
 class Api::V1::GroupsController < Api::BaseController
   before_action :ensure_parameters_exist, only: %i[create update]
-  before_action :find_object, only: :update
+  before_action :find_object, only: %i[show update]
+
+  def show
+    if UserGroup.search_role(current_user.id, params[:id]).present? || group.is_public?
+      render json: {
+      messages: I18n.t("groups.show.success", group_name: group.name),
+      data: {
+        group: Serializers::Groups::GroupAllSerializer
+          .new(object: group).serializer
+      }
+    }, status: 200
+    else
+      require_permission
+    end
+  end
 
   def create
     @group = Group.new group_params
