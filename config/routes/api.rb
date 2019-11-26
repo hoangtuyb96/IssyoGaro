@@ -10,14 +10,16 @@ namespace :api, defaults: {format: "json"} do
   scope module: :v1,
     constraints: ApiConstraints.new(version:1, default: true) do
       resources :users, only: :show
-      resources :groups, only: %i[create update] do
+      resources :groups, only: %i[show create update] do
         get "group_members", to: "group_members#index"
-        resources :goals, only: :create do
+        resources :goals, only: %i[create update] do
           resources :user_goals, only: %i[create destroy]
         end
       end
       resources :user_groups, only: %i[create update destroy]
       resources :invites, only: :create
+      resources :goals, only: :show
+      resources :user_tasks, only: :update
       get "home", to: "home_pages#index"
     end
 end
