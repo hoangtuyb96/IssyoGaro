@@ -34,6 +34,7 @@ en:
     missing_params: "Missing parameter"
     invalid_token: "Invalid token"
     not_permission: "You have not permission to access"
+    need_join_group_first: "You need to join group first"
   users:
     show:
       success: "Show user success"
@@ -59,3 +60,7 @@ en:
   goals:
     create:
       success: "Create goal successful"
+  user_goals:
+    create:
+      success: "You have joined %{goal_name}"
+      joined: "You already joined %{goal_name} group"

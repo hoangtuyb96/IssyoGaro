@@ -6,6 +6,7 @@ class Api::V1::GoalsController < Api::BaseController
     @goal = Goal.new goal_params
     goal.start_day = goal.tasks.map(&:start_day).min
     goal.end_day = goal.tasks.map(&:end_day).max
+    goal.group_id = params[:group_id]
     if goal.save
       action_successful "create"
     else

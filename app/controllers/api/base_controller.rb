@@ -65,4 +65,17 @@ class Api::BaseController < ActionController::API
     cur_role.eql? role
   end
   # rubucop:enable Metrics/MethodLength
+
+  def cur_user_joined_group?(group_id)
+    group = Group.find_by id: group_id
+    return false unless group.present?
+
+    group.users.include? current_user
+  end
+
+  def join_group_first
+    render json: {
+      messages: I18n.t("api.need_join_group_first")
+    }, status: 401
+  end
 end

@@ -10,6 +10,7 @@ class Group < ApplicationRecord
   has_many :requested_users, through: :requests, source: :user
   has_many :comments, as: :commentable
   has_many :notifications, as: :notificationable
+  has_many :goals
 
   validates :name, presence: true, uniqueness: true
 end
