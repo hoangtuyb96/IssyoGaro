@@ -17,5 +17,6 @@ namespace :api, defaults: {format: "json"} do
         end
       end
       resources :user_groups, only: %i[create update destroy]
+      resources :invites, only: :create
     end
 end
