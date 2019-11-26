@@ -13,7 +13,7 @@ namespace :api, defaults: {format: "json"} do
       resources :groups, only: %i[create update] do
         get "group_members", to: "group_members#index"
         resources :goals, only: :create do
-          resources :user_goals, only: :create
+          resources :user_goals, only: %i[create destroy]
         end
       end
       resources :user_groups, only: %i[create update destroy]
