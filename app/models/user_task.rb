@@ -3,6 +3,7 @@ class UserTask < ApplicationRecord
 
   belongs_to :user
   belongs_to :task
+  belongs_to :user_goal
 
   def default_process
     self.process ||= 0

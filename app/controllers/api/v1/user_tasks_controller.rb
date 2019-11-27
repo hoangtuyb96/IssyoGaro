@@ -18,7 +18,7 @@ class Api::V1::UserTasksController < Api::BaseController
 
   private
 
-  attr_reader :user_task
+  attr_reader :user_task, :user_goal
 
   def find_user_task
     @user_task = UserTask.find_by task_id: params[:user_task][:task_id],
@@ -43,20 +43,6 @@ class Api::V1::UserTasksController < Api::BaseController
     final_fut
   end
 
-  def evaluate_success
-    render json: {
-      messages: I18n.t("user_tasks.update.success"),
-      data: {
-        user: Serializers::Users::UserSimpleSerializer
-          .new(object: user).serializer,
-        goal: Serializers::Goals::GoalSimpleSerializer
-          .new(object: goal).serializer,
-        tasks: Serializers::UserTasks::UserTaskProcessSerializer
-          .new(object: filter_user_task).serializer
-      }
-    }, status: 200
-  end
-
   def cant_evaluate_yourself
     render json: {
       messages: I18n.t("user_tasks.messages.cant_evaluate_self")
@@ -72,6 +58,30 @@ class Api::V1::UserTasksController < Api::BaseController
   def evaluate_another
     user_task.evaluate_user_id = current_user.id
     user_task.update_attributes process: params[:user_task][:process]
+    update_goal_process
     evaluate_success
+  end
+
+  def update_goal_process
+    @user_goal = user_task.user_goal
+    user_tasks = user_goal.user_tasks
+    user_process =
+      (user_tasks.map(&:process).sum / user_tasks.count).round(3)
+    user_goal.update_attributes process: user_process
+  end
+
+  def evaluate_success
+    render json: {
+      messages: I18n.t("user_tasks.update.success"),
+      data: {
+        user: Serializers::Users::UserSimpleSerializer
+          .new(object: user).serializer,
+        goal: Serializers::Goals::GoalSimpleSerializer
+          .new(object: goal).serializer,
+        goal_process: user_goal.process,
+        tasks: Serializers::UserTasks::UserTaskProcessSerializer
+          .new(object: filter_user_task).serializer
+      }
+    }, status: 200
   end
 end
