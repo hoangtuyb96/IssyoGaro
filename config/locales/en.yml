@@ -83,3 +83,7 @@ en:
       date_expired: "Date expried"
     update:
       success: "Evaluate success"
+  summaries:
+    create:
+      done: "The goal is done"
+      cant_create_achievement_again: "You have created achievement. You can't create one more"
