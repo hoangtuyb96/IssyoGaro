@@ -23,10 +23,25 @@ class Api::V1::UserGoalsController < Api::BaseController
 
   private
 
-  attr_reader :user_goal
+  attr_reader :user_goal, :ug, :created_ug
 
   def user_goal_params
     params.require(:user_goal).permit UserGoal::ATRIBUTES_PARAMS
+  end
+
+  def check_exist
+    @ug = UserGoal
+      .where(user_id: current_user.id, goal_id: params[:goal_id]).take
+    ug.presence ? true : false
+  end
+
+  def join_goal_success
+    @created_ug = UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
+    goal(params[:goal_id]).tasks.each do |task|
+      UserTask.create user_id: current_user.id, task_id: task.id,
+                      user_goal_id: created_ug.id
+    end
+    join_goal_success_response
   end
 
   def join_goal_success_response
@@ -38,6 +53,7 @@ class Api::V1::UserGoalsController < Api::BaseController
           .new(object: current_user).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal(params[:goal_id])).serializer,
+        goal_process: created_ug.process,
         tasks: Serializers::UserTasks::UserTaskProcessSerializer
           .new(object: filter_user_task).serializer
       }
@@ -56,11 +72,6 @@ class Api::V1::UserGoalsController < Api::BaseController
     @goal ||= Goal.find_by id: goal_id
   end
 
-  def check_exist
-    ug = UserGoal.where(user_id: current_user.id, goal_id: params[:goal_id])
-    ug.presence ? true : false
-  end
-
   def joined_goal
     render json: {
       messages: I18n.t("user_goals.create.joined",
@@ -70,18 +81,11 @@ class Api::V1::UserGoalsController < Api::BaseController
           .new(object: current_user).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal(params[:goal_id])).serializer,
+        goal_process: ug.process,
         tasks: Serializers::UserTasks::UserTaskProcessSerializer
           .new(object: filter_user_task).serializer
       }
     }, status: 409
-  end
-
-  def join_goal_success
-    UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
-    goal(params[:goal_id]).tasks.each do |task|
-      UserTask.create user_id: current_user.id, task_id: task.id
-    end
-    join_goal_success_response
   end
 
   def permission?(params_user_id)
