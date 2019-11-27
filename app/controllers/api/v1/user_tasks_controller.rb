@@ -4,7 +4,6 @@ class Api::V1::UserTasksController < Api::BaseController
 
   # rubucop:disable Metrics/AbcSize
   def update
-    # binding.pry
     if goal.users.include? current_user
       if user_task.user_id.eql? current_user.id
         cant_evaluate_yourself
@@ -45,7 +44,6 @@ class Api::V1::UserTasksController < Api::BaseController
   end
 
   def evaluate_success
-    # binding.pry
     render json: {
       messages: I18n.t("user_tasks.update.success"),
       data: {
