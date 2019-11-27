@@ -80,5 +80,6 @@ en:
     messages:
       cant_evaluate_self: "You can't evaluate yourself"
       join_goal_first: "You need to join this goal first"
+      date_expired: "Date expried"
     update:
       success: "Evaluate success"

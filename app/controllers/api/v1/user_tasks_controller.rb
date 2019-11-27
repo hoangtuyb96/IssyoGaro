@@ -2,19 +2,19 @@ class Api::V1::UserTasksController < Api::BaseController
   before_action :ensure_parameters_exist, only: :update
   before_action :find_user_task, only: :update
 
-  # rubucop:disable Metrics/AbcSize
   def update
     if goal.users.include? current_user
       if user_task.user_id.eql? current_user.id
         cant_evaluate_yourself
-      else
+      elsif user_task.task.end_day > Time.now
         evaluate_another
+      else
+        date_expired
       end
     else
       join_goal_first
     end
   end
-  # rubucop:enable Metrics/AbcSize
 
   private
 
@@ -83,5 +83,11 @@ class Api::V1::UserTasksController < Api::BaseController
           .new(object: filter_user_task).serializer
       }
     }, status: 200
+  end
+
+  def date_expired
+    render json: {
+      messages: I18n.t("user_tasks.messages.date_expired")
+    }, status: 401
   end
 end

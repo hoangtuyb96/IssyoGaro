@@ -31,12 +31,13 @@ class Api::V1::UserGoalsController < Api::BaseController
 
   def check_exist
     @ug = UserGoal
-      .where(user_id: current_user.id, goal_id: params[:goal_id]).take
+          .where(user_id: current_user.id, goal_id: params[:goal_id]).take
     ug.presence ? true : false
   end
 
   def join_goal_success
-    @created_ug = UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
+    @created_ug =
+      UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
     goal(params[:goal_id]).tasks.each do |task|
       UserTask.create user_id: current_user.id, task_id: task.id,
                       user_goal_id: created_ug.id
@@ -44,6 +45,7 @@ class Api::V1::UserGoalsController < Api::BaseController
     join_goal_success_response
   end
 
+  # rubocop:disable Metrics/MethodLength
   def join_goal_success_response
     render json: {
       messages: I18n.t("user_goals.create.success",
@@ -59,6 +61,7 @@ class Api::V1::UserGoalsController < Api::BaseController
       }
     }, status: 200
   end
+  # rubocop:enable Metrics/MethodLength
 
   def filter_user_task
     final_fut = []
@@ -72,6 +75,7 @@ class Api::V1::UserGoalsController < Api::BaseController
     @goal ||= Goal.find_by id: goal_id
   end
 
+  # rubocop:disable Metrics/MethodLength
   def joined_goal
     render json: {
       messages: I18n.t("user_goals.create.joined",
@@ -87,6 +91,7 @@ class Api::V1::UserGoalsController < Api::BaseController
       }
     }, status: 409
   end
+  # rubocop:enable Metrics/MethodLength
 
   def permission?(params_user_id)
     current_user.id.equal? params_user_id
