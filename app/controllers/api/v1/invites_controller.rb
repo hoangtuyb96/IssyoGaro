@@ -24,10 +24,10 @@ class Api::V1::InvitesController < Api::BaseController
 
   def invite_to_group
     Invite.create(sender_id: current_user.id, receiver_id: params[:user_id],
-      group_id: params[:group_id])
+                  group_id: params[:group_id])
     render json: {
       messages: I18n.t("invites.create.success",
-        group_name: group(params[:group_id]).name),
+                       group_name: group(params[:group_id]).name),
       data: { group: Serializers::Groups::GroupSerializer
         .new(object: group(params[:group_id])) }
     }, data: 200
@@ -42,10 +42,10 @@ class Api::V1::InvitesController < Api::BaseController
 
   def invited
     Invite.create(sender_id: current_user.id, receiver_id: params[:user_id],
-      group_id: params[:group_id])
+                  group_id: params[:group_id])
     render json: {
       messages: I18n.t("invites.create.invited",
-        user_name: user(params[:user_id]).name),
+                       user_name: user(params[:user_id]).name),
       data: { group: Serializers::Groups::GroupSerializer
         .new(object: group(params[:group_id])) }
     }, data: 409

@@ -6,10 +6,6 @@ class Api::V1::UserGoalsController < Api::BaseController
       if check_exist
         joined_goal
       else
-        UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
-        goal(params[:goal_id]).tasks.each do |task|
-          UserTask.create user_id: current_user.id, task_id: task.id
-        end
         join_goal_success
       end
     else
@@ -33,9 +29,9 @@ class Api::V1::UserGoalsController < Api::BaseController
     params.require(:user_goal).permit UserGoal::ATRIBUTES_PARAMS
   end
 
-  def join_goal_success
+  def join_goal_success_response
     render json: {
-      messages: I18n.t("user_goals.create_success",
+      messages: I18n.t("user_goals.create.success",
                        goal_name: goal(params[:goal_id]).name),
       data: {
         user: Serializers::Users::UserSimpleSerializer
@@ -78,6 +74,14 @@ class Api::V1::UserGoalsController < Api::BaseController
           .new(object: filter_user_task).serializer
       }
     }, status: 409
+  end
+
+  def join_goal_success
+    UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
+    goal(params[:goal_id]).tasks.each do |task|
+      UserTask.create user_id: current_user.id, task_id: task.id
+    end
+    join_goal_success_response
   end
 
   def permission?(params_user_id)
