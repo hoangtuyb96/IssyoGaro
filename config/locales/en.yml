@@ -68,8 +68,8 @@ en:
     messages:
       user_goal_not_found: "You have not yet join this goal"
     create:
-      success: "You have joined %{goal_name}"
-      joined: "You already joined %{goal_name} group"
+      success: "Joined %{goal_name} success"
+      joined: "You already joined %{goal_name} campain"
     destroy:
       success: "You have abaddoned goal"
   invites:
