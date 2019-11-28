@@ -2,7 +2,7 @@ class Api::RegistrationsController < Devise::RegistrationsController
   protect_from_forgery with: :null_session
 
   def create
-    user = User.new user_params
+    @user = User.new user_params
     if user.save
       successful_signup
     else
@@ -11,6 +11,8 @@ class Api::RegistrationsController < Devise::RegistrationsController
   end
 
   private
+
+  attr_reader :user
 
   def user_params
     params.require(:user).permit User::ATTRIBUTES_PARAMS
