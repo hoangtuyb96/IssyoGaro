@@ -1,5 +1,8 @@
 const initialState = {
-  currentUser: {name: localStorage.getItem("name")}
+  currentUser: { 
+    name: localStorage.getItem("name"),
+    isLogin: !!localStorage.getItem('auth-token')
+  }
 };
 
 const authReducer = (state = initialState, action) => {

@@ -20,7 +20,6 @@ class Header extends Component {
 
   render() {
     const {isLogin} = this.props;
-    console.log(this.props.auth)
     return (
       <Container>
         <div className="header">
@@ -34,6 +33,7 @@ class Header extends Component {
               </React.Fragment>
             ) : (
               <React.Fragment>
+                <Col xs="1"><Link to="/create_group">CreateGroup</Link></Col>
                 <Col xs="1">{ this.props.auth.currentUser.name }</Col>
                 <Col xs="1"><div onClick={this.handleLogout}>Logout</div></Col>
               </React.Fragment>

@@ -1,5 +1,5 @@
 class Serializers::Groups::GroupSerializer < Serializers::SupportSerializer
-  attrs :name, :description, :category, :cover, :is_public
+  attrs :id, :name, :description, :category, :cover, :is_public
 
   def category
     return unless object.category
