@@ -1,5 +1,7 @@
 {
   "name": "IssyoGaro",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "history": "^4.10.1"
+  }
 }
