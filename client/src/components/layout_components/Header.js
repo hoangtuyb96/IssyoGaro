@@ -24,18 +24,19 @@ class Header extends Component {
       <Container>
         <div className="header">
           <Row>
-            <Col xs="2"><Link to="/">Logo</Link></Col>
+            <Col xs="2"><Link to="/"><img src={ require("../../logo.png")} heigh="80" width="80" /></Link></Col>
             <Col xs="md"></Col>
             {!isLogin ? (
               <React.Fragment>
-                <Col xs="1"><Link to="/signup">Signup</Link></Col>
-                <Col xs="1"><Link to="/signin">Login</Link></Col>
+                <Col xs="2"><Link to="/signup">Signup</Link></Col>
+                <Col xs="2"><Link to="/signin">Login</Link></Col>
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <Col xs="1"><Link to="/create_group">CreateGroup</Link></Col>
-                <Col xs="1">{ this.props.auth.currentUser.name }</Col>
-                <Col xs="1"><div onClick={this.handleLogout}>Logout</div></Col>
+                <Col xs="2"><Link to="/create_group">Create Group</Link></Col>
+                { console.log(this.props.auth.currentUser)}
+                <Col xs="2"><Link to={`/users/${this.props.auth.currentUser.id}`}>{ this.props.auth.currentUser.name }</Link></Col>
+                <Col xs="2"><div onClick={this.handleLogout}>Logout</div></Col>
               </React.Fragment>
             )}
           </Row>

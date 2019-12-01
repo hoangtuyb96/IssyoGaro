@@ -16,7 +16,7 @@ import { connect } from "react-redux"
 class App extends Component {
 
   render() {
-    const isLogin = this.props.auth && this.props.auth.currentUser && this.props.auth.currentUser.isLogin
+    const isLogin = this.props.auth && this.props.auth.currentUser && this.props.auth.currentUser.token
     return (
       <div>
         <Header {...this.props} isLogin={isLogin}/>

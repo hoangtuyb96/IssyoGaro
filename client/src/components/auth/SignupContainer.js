@@ -21,8 +21,13 @@ class SignupContainer extends Component {
   async handleSubmit(event)  {
     event.preventDefault();
 
-    const authUser = await login(this.state);
-    this.props.dpLoginUserSuccess(authUser)
+    let user_get = await login(this.state);
+    const authUser = {
+      id: user_get.id,
+      name: user_get.name,
+      token: user_get.authentication_token
+    };
+    this.props.dpLoginUserSuccess(authUser);
     this.props.history.push("/users/" + authUser.id);
   }
 

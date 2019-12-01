@@ -1,7 +1,9 @@
 const initialState = {
   currentUser: { 
     name: localStorage.getItem("name"),
-    isLogin: !!localStorage.getItem('auth-token')
+    isLogin: !!localStorage.getItem('auth-token'),
+    token: localStorage.getItem('auth-token'),
+    id: localStorage.getItem('id')
   }
 };
 
