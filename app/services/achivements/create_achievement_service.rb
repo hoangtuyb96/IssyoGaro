@@ -5,11 +5,27 @@ class Achivements::CreateAchievementService
     @goal_id = params[:goal_id]
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Style/GuardClause
   def perform
-    user_goals[0].present? ?create_achievement(user_goals[0].user_id, 1): return
-    user_goals[1].present? ?create_achievement(user_goals[1].user_id, 2): return
-    user_goals[2].present? ?create_achievement(user_goals[2].user_id, 3): return
+    if user_goals[0].present?
+      create_achievement(user_goals[0].user_id, 1)
+    else
+      return
+    end
+    if user_goals[1].present?
+      create_achievement(user_goals[1].user_id, 2)
+    else
+      return
+    end
+    if user_goals[2].present?
+      create_achievement(user_goals[2].user_id, 3)
+    else
+      return
+    end
   end
+  # rubocop:enable Style/GuardClause
+  # rubocop:enable Metrics/MethodLength
 
   private
 
