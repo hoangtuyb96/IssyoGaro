@@ -6,6 +6,7 @@ import Header from './components/layout_components/Header';
 import Footer from './components/layout_components/Footer';
 import SignupContainer from './components/auth/SignupContainer';
 import SigninContainer from './components/auth/SigninContainer';
+import ProfileContainer from './components/auth/ProfileContainer';
 import axiosConfig from './axios_config';
 import { connect } from "react-redux"
 
@@ -20,7 +21,7 @@ class App extends Component {
           <Route exact path="/" component={HomePagesContainer} />
           <Route exact path="/signup" component={SignupContainer} />
           <Route exact path="/signin" component={SigninContainer} />
-          <Route exact path="/users:id/" component={SigninContainer} />
+          <Route exact path="/users/:id/" component={ProfileContainer} />
         </Switch>
         <Footer />
       </div>

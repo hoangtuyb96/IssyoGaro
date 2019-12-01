@@ -1,4 +1,5 @@
 class Api::V1::UsersController < Api::BaseController
+  acts_as_token_authentication_handler_for User, except: :show
   before_action :find_object, only: :show
 
   def show
