@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Table } from 'reactstrap';
+import { Container, Row, Table } from 'react-bootstrap';
 
 class HomePagesContainer extends Component {
   constructor(props) {
