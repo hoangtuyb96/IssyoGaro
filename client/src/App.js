@@ -14,6 +14,9 @@ import axiosConfig from './axios_config';
 import { connect } from "react-redux"
 
 class App extends Component {
+  componentDidMount() {
+    axiosConfig();
+  }
 
   render() {
     const isLogin = this.props.auth && this.props.auth.currentUser && this.props.auth.currentUser.token

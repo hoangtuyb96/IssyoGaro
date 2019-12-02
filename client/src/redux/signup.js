@@ -6,6 +6,7 @@ export const login = async user => {
       const user_data = resp.data.data.user
       localStorage.setItem("auth-token", user_data.authentication_token);
       localStorage.setItem("name", user_data.name);
+      localStorage.setItem("user_id", user_data.id);
       return user_data
     })
     .catch(error => {
