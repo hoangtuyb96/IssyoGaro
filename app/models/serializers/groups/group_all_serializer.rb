@@ -1,10 +1,10 @@
 class Serializers::Groups::GroupAllSerializer < Serializers::SupportSerializer
-  attrs :name, :description, :category, :cover, :is_public, :goals
+  attrs :id, :name, :description, :category, :cover, :is_public, :goals
 
   def category
     return unless object.category
 
-    Serializers::Category::CategorySerializer
+    Serializers::Categories::CategorySerializer
       .new(object: object.category).serializer
   end
 

@@ -6,7 +6,7 @@ class Api::V1::HomePagesController < Api::BaseController
     render json: {
       data: {
         groups: Serializers::Groups::GroupSerializer
-          .new(object: @groups)
+          .new(object: @groups).serializer
       }
     }
   end

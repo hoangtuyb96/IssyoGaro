@@ -8,7 +8,7 @@ class Api::V1::UserGroupsController < Api::BaseController
       if role.presence
         joined_group
       else
-        handle_joind_group
+        handle_join_group
       end
     else
       require_permission
@@ -57,8 +57,8 @@ class Api::V1::UserGroupsController < Api::BaseController
     render json: {
       messages: I18n.t("user_groups.create.joined",
         group_name: group.name),
-      data: { group: Serializers::Groups::GroupSerializer
-        .new(object: group) }
+      data: { group: Serializers::Groups::GroupAllSerializer
+        .new(object: group).serializer }
     }, data: 409
   end
 
@@ -66,8 +66,8 @@ class Api::V1::UserGroupsController < Api::BaseController
     render json: {
       messages: I18n.t("user_groups.create.success",
         group_name: group.name),
-      data: { group: Serializers::Groups::GroupsSerializer
-        .new(object: group) }
+      data: { group: Serializers::Groups::GroupAllSerializer
+        .new(object: group).serializer }
     }, status: 200
   end
 
