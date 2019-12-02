@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
+import GoalForm from './GoalForm';
+import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom'
 import axios from 'axios';
-import { Container, Row, Col, Button, Table } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 
-class GroupContainer extends Component {
+class ShowGoalContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      group: {},
+      goal: {},
       loading: true
     }
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
-    axios.get("http://localhost:3001/api/groups/" + id,
+    axios.get("http://localhost:3001/api/goals/" + id,
       {headers: { "IG-AUTH-TOKEN": localStorage.getItem("auth-token")}})
     .then(response => {
-      const group = response.data.data.group
       this.setState({
-        loading: false,
-        group: group
+        goal: response.data.data.goal,
+        loading: false
       })
     })
     .catch(error => {
@@ -30,36 +30,36 @@ class GroupContainer extends Component {
 
   render() {
     return (
-      <div className="profile_user">
-        <Container>
-          <h1 className="user_information">{this.state.group.name}</h1>
+      <Container>
+        { console.log(this.state.goal) }
+        <h1 className="user_information">{this.state.goal.name}</h1>
           <Row>
             <Col xs="3"></Col>
-            <Col xs="3">Group name:</Col>
-            <Col xs="3">{this.state.group.name}</Col>
+            <Col xs="3">Goal name:</Col>
+            <Col xs="3">{this.state.goal.name}</Col>
             <Col xs="3"></Col>
 
             <Col xs="3"></Col>
             <Col xs="3">Description:</Col>
-            {(this.state.group.category == null) ? (
+            {(this.state.goal.category == null) ? (
               <Col xs="3">None</Col>
             ) : (
-              <Col xs="3">{this.state.group.description}</Col>
+              <Col xs="3">{this.state.goal.description}</Col>
             )}
             <Col xs="3"></Col>
 
             <Col xs="3"></Col>
             <Col xs="3">Category:</Col>
-            {(this.state.group.category == null) ? (
+            {(this.state.goal.category == null) ? (
               <Col xs="3">None</Col>
             ) : (
-              <Col xs="3">{this.state.group.adress}</Col>
+              <Col xs="3">{this.state.goal.adress}</Col>
             )}
             <Col xs="3"></Col>
 
             <Col xs="3"></Col>
             <Col xs="3">Type:</Col>
-            {this.state.group.is_public ? (
+            {this.state.goal.is_public ? (
               <Col xs="3">Public</Col>
             ) : (
               <Col xs="3">Private</Col>
@@ -69,14 +69,14 @@ class GroupContainer extends Component {
             <Col xs="3"></Col>
             <Col xs="3">Goals:</Col>
             { !this.state.loading ? (
-              <Col xs="3">{this.state.group.goals.length}</Col>
+              <Col xs="3">{this.state.goal.tasks.length}</Col>
               ) : (
               ""
             )}
             <Col xs="3"></Col>
 
             { !this.state.loading ? (
-              this.state.group.goals.length > 0 ? (
+              this.state.goal.tasks.length > 0 ? (
                 <Table striped bordered hover>
                   <thead>
                     <tr>
@@ -88,7 +88,7 @@ class GroupContainer extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                  {this.state.group.goals.map( goal => {
+                  {this.state.goal.tasks.map( goal => {
                     return (
                       <tr key={goal.id}>
                         <td>{goal.id}</td>
@@ -107,15 +107,10 @@ class GroupContainer extends Component {
               ) : (
               ""
             )}
-
-            <Col xs="8"></Col>
-            <Col xs="md"><Link to={"/groups/" + this.state.group.id + "/goals"}><Button variant="primary">Create Goal</Button></Link></Col>
-            <Col xs="2"></Col>
           </Row>
-        </Container>
-      </div>
+      </Container>
     )
   }
 }
 
-export default GroupContainer;
+export default ShowGoalContainer;
