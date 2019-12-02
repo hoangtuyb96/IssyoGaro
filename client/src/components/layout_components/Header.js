@@ -34,7 +34,6 @@ class Header extends Component {
             ) : (
               <React.Fragment>
                 <Col xs="2"><Link to="/create_group">Create Group</Link></Col>
-                { console.log(this.props.auth.currentUser)}
                 <Col xs="2"><Link to={`/users/${this.props.auth.currentUser.id}`}>{ this.props.auth.currentUser.name }</Link></Col>
                 <Col xs="2"><div onClick={this.handleLogout}>Logout</div></Col>
               </React.Fragment>

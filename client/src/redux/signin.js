@@ -6,6 +6,8 @@ export const userSigninFetch = sign_in => {
       .then(resp => {
         const user_data = resp.data.data.user_info
         localStorage.setItem("auth-token", user_data.token);
+        localStorage.setItem("user_id", user_data.id);
+        localStorage.setItem("name", user_data.name);
         dispatch(loginUser(user_data));
       })
       .catch(error => {
