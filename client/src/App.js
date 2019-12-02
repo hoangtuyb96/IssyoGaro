@@ -7,11 +7,13 @@ import Footer from './components/layout_components/Footer';
 import SignupContainer from './components/auth/SignupContainer';
 import SigninContainer from './components/auth/SigninContainer';
 import ProfileContainer from './components/auth/ProfileContainer';
-import CreateGroupContainer from './components/groups/CreateGroupContainer'
-import GroupContainer from './components/groups/GroupContainer'
+import CreateGroupContainer from './components/groups/CreateGroupContainer';
+import GroupContainer from './components/groups/GroupContainer';
+import CreateGoalContainer from './components/goals/CreateGoalContainer';
+import ShowGoalContainer from './components/goals/ShowGoalContainer';
 
 import axiosConfig from './axios_config';
-import { connect } from "react-redux"
+import { connect } from "react-redux";
 
 class App extends Component {
   componentDidMount() {
@@ -31,6 +33,8 @@ class App extends Component {
           <Route exact path="/users/:id/" component={ProfileContainer} />
           <Route exact path="/create_group" component={CreateGroupContainer} />
           <Route exact path="/groups/:id/" component={GroupContainer} />
+          <Route exact path="/groups/:group_id/goals/" component={CreateGoalContainer} />
+          <Route exact path="/goals/:id" component={ShowGoalContainer} />
         </Switch>
         <Footer />
       </div>

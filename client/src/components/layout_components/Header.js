@@ -24,7 +24,7 @@ class Header extends Component {
       <Container>
         <div className="header">
           <Row>
-            <Col xs="2"><Link to="/"><img src={ require("../../logo.png")} heigh="80" width="80" /></Link></Col>
+            <Col xs="2"><Link to="/"><img src={ require("../../logo.png")} heigh="80" width="80" alt="logo"/></Link></Col>
             <Col xs="md"></Col>
             {!isLogin ? (
               <React.Fragment>

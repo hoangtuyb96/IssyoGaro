@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { useParams} from "react-router";
-import { Container, Row, Table, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 class ProfileContainer extends Component {
   constructor(props) {
