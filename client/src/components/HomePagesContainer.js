@@ -13,9 +13,9 @@ class HomePagesContainer extends Component {
   componentDidMount() {
     axios.get('http://localhost:3001/api/home')
     .then(response => {
-      console.log(response.data.data.groups.object)
+      console.log(response.data.data.groups)
       this.setState({
-        groups: response.data.data.groups.object
+        groups: response.data.data.groups
       })
     })
     .catch(error => console.log(error))
