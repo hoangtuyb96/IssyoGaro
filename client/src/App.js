@@ -9,6 +9,7 @@ import SigninContainer from './components/auth/SigninContainer';
 import ProfileContainer from './components/auth/ProfileContainer';
 import CreateGroupContainer from './components/groups/CreateGroupContainer';
 import GroupContainer from './components/groups/GroupContainer';
+import GroupMemberContainer from './components/groups/GroupMemberContainer';
 import CreateGoalContainer from './components/goals/CreateGoalContainer';
 import ShowGoalContainer from './components/goals/ShowGoalContainer';
 
@@ -36,7 +37,9 @@ class App extends Component {
           <Route exact path="/groups/:id/" component={GroupContainer} />
           <Route exact path="/groups/:group_id/goals/" component={CreateGoalContainer} />
           <Route exact path="/goals/:id" component={ShowGoalContainer} />
+          <Route exact path="/groups/:group_id/members" component={GroupMemberContainer} />
         </Switch>
+        <hr />
         <Footer />
       </div>
     );
