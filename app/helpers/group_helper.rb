@@ -45,6 +45,7 @@ module GroupHelper
     if ug.present?
       group_serializer[:goals] =
         Serializers::Goals::GoalSerializer.new(object: group.goals).serializer
+      group_serializer[:user_group_id] = ug.id
     end
     group_serializer
   end

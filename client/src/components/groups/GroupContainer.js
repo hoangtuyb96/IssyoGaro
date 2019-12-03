@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Button, Table } from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import { joinGroup } from '../../redux/groups/join';
+import { leaveGroup } from '../../redux/groups/leave';
 
 class GroupContainer extends Component {
   constructor(props) {
@@ -28,11 +30,37 @@ class GroupContainer extends Component {
     });
   }
 
+  async handleJoinGroup(event) {
+    const user_group = await joinGroup(event.user_group);
+    console.log(user_group);
+    window.location.reload(false); 
+  }
+
+  async handleLeaveGroup(event) {
+    await leaveGroup(event.user_group_id);
+    window.location.reload(false);
+  }
+
   render() {
     return (
       <div className="profile_user">
         <Container>
           <h1 className="user_information">{this.state.group.name}</h1>
+          { (this.state.group.current_user_role === null ) ? (
+              <div onClick={() => this.handleJoinGroup({user_group: {
+                user_id: localStorage.getItem("user_id"),
+                group_id: this.state.group.id
+              }})}>
+                <Button variant="primary" size="sm">Join</Button>
+              </div>
+            ) : (
+              <div onClick={() => this.handleLeaveGroup({
+                user_group_id: this.state.group.user_group_id
+              })}>
+                <Button variant="danger" size="sm">Leave</Button>
+              </div>
+            )
+          }
           <Row>
             <Col xs="3"></Col>
             <Col xs="3">Group name:</Col>
