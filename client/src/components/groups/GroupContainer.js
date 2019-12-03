@@ -17,7 +17,7 @@ class GroupContainer extends Component {
     axios.get("http://localhost:3001/api/groups/" + id,
       {headers: { "IG-AUTH-TOKEN": localStorage.getItem("auth-token")}})
     .then(response => {
-      const group = response.data.data.group
+      const group = response.data.group
       this.setState({
         loading: false,
         group: group
@@ -53,7 +53,7 @@ class GroupContainer extends Component {
             {(this.state.group.category == null) ? (
               <Col xs="3">None</Col>
             ) : (
-              <Col xs="3">{this.state.group.adress}</Col>
+              <Col xs="3">{this.state.group.category}</Col>
             )}
             <Col xs="3"></Col>
 
@@ -66,51 +66,68 @@ class GroupContainer extends Component {
             )}
             <Col xs="3"></Col>
 
-            <Col xs="3"></Col>
-            <Col xs="3">Goals:</Col>
-            { !this.state.loading ? (
-              <Col xs="3">{this.state.group.goals.length}</Col>
+            { (this.state.group.current_user_role === null ) ? (
+              'You can see all goals without join group'
               ) : (
-              ""
-            )}
-            <Col xs="3"></Col>
 
-            { !this.state.loading ? (
-              this.state.group.goals.length > 0 ? (
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Description</th>
-                      <th>Start day</th>
-                      <th>End day</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {this.state.group.goals.map( goal => {
-                    return (
-                      <tr key={goal.id}>
-                        <td>{goal.id}</td>
-                        <td>{goal.name}</td>
-                        <td>{goal.description}</td>
-                        <td>{goal.start_day}</td>
-                        <td>{goal.end_day}</td>
-                      </tr>
+              <div className="goals_details">
+              <Row>
+                <Col xs="3"></Col>
+                <Col xs="3">Goals:</Col>
+                { !this.state.loading ? (
+                  <Col xs="3">{this.state.group.goals.length}</Col>
+                  ) : (
+                  ""
+                )}
+                <Col xs="3"></Col>
+
+                { !this.state.loading ? (
+                    this.state.group.goals.length > 0 ? (
+                      <Table striped bordered hover>
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Start day</th>
+                            <th>End day</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.group.goals.map( goal => {
+                          return (
+                            <tr key={goal.id}>
+                              <td>{goal.id}</td>
+                              <td>{goal.name}</td>
+                              <td>{goal.description}</td>
+                              <td>{goal.start_day}</td>
+                              <td>{goal.end_day}</td>
+                            </tr>
+                          )
+                        })}
+                        </tbody>
+                      </Table>
+                    ) : (
+                      ""
                     )
-                  })}
-                  </tbody>
-                </Table>
-              ) : (
-                ""
-              )
-              ) : (
-              ""
-            )}
+                  ) : (
+                  ""
+                  )
+                }
 
-            <Col xs="8"></Col>
-            <Col xs="md"><Link to={"/groups/" + this.state.group.id + "/goals"}><Button variant="primary">Create Goal</Button></Link></Col>
-            <Col xs="2"></Col>
+                { this.state.group.current_user_role != 1 ? (
+                      <Link to={"/groups/" + this.state.group.id + "/goals"}>
+                        <Button variant="primary">Create Goal</Button>
+                      </Link>
+                  ) : (
+                  ""
+                  )
+                }
+              </Row>
+            </div>
+            )
+            }
+            
           </Row>
         </Container>
       </div>

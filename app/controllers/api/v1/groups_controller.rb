@@ -3,18 +3,11 @@ class Api::V1::GroupsController < Api::BaseController
   before_action :find_object, only: %i[show update]
 
   def show
-    if UserGroup.search_role(current_user.id, params[:id]).present? ||
-       group.is_public?
-      render json: {
-        messages: I18n.t("groups.show.success", group_name: group.name),
-        data: {
-          group: Serializers::Groups::GroupAllSerializer
-            .new(object: group).serializer
-        }
-      }, status: 200
-    else
-      require_permission
-    end
+    render json: {
+      messages: I18n.t("groups.show.success", group_name: group.name),
+      group: ApplicationController.helpers
+                                  .serializer_group(group, current_user.id)
+    }, status: 200
   end
 
   def create

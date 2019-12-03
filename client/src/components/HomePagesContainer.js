@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Container, Row, Table } from 'react-bootstrap';
-import { joinGroup } from '../redux/groups/join'
+import { joinGroup } from '../redux/groups/join';
+import { Link } from 'react-router-dom';
 
 class HomePagesContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      groups: []
+      groups: [],
+      is_loading: true
     }
     this.handleJoinGroup = this.handleJoinGroup.bind(this);
   }
@@ -21,9 +23,8 @@ class HomePagesContainer extends Component {
   componentDidMount() {
     axios.get('http://localhost:3001/api/home')
     .then(response => {
-      console.log(response.data.data.groups)
       this.setState({
-        groups: response.data.data.groups
+        groups: response.data.groups
       })
     })
     .catch(error => console.log(error))
@@ -41,6 +42,7 @@ class HomePagesContainer extends Component {
                 <th>ID</th>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Public</th>
                 <th>Created at</th>
                 <th>Action</th>
               </tr>
@@ -50,13 +52,29 @@ class HomePagesContainer extends Component {
               return (
                 <tr key={group.id}>
                   <td>{group.id}</td>
-                  <td>{group.name}</td>
+                  <td><Link to={"/groups/" + group.id}>{group.name}</Link></td>
                   <td>{group.description}</td>
+                  <td>
+                    { (group.is_public) ? (
+                      <p>Public</p>
+                      ) : (
+                      <p>Private</p>
+                      )
+                    }
+                  </td>
                   <td>{group.created_at}</td>
-                  <td><div onClick={() => this.handleJoinGroup({user_group: {
-                    user_id: localStorage.getItem("user_id"),
-                    group_id: group.id
-                  }})}>Join</div></td>
+                  <td>
+                    <div onClick={() => this.handleJoinGroup({user_group: {
+                      user_id: localStorage.getItem("user_id"),
+                      group_id: group.id
+                    }})}>
+                      { ( group.is_joined ) ? (
+                          <p>Joined</p>
+                        ) : (
+                          <p>Join</p>
+                        )}
+                    </div>
+                  </td>
                 </tr>
               )
             })}
