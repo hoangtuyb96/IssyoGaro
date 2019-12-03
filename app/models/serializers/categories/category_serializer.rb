@@ -1,3 +1,4 @@
-class Serializers::Categories::CategorySerializer < Serializers::SupportSerializer
+class Serializers::Categories::CategorySerializer <
+  Serializers::SupportSerializer
   attrs :name
 end

@@ -16,7 +16,8 @@ import axiosConfig from './axios_config';
 import { connect } from "react-redux";
 
 class App extends Component {
-  componentDidMount() {
+  constructor(props){
+    super(props);
     axiosConfig();
   }
 
