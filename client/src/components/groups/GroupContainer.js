@@ -144,9 +144,14 @@ class GroupContainer extends Component {
                 }
 
                 { this.state.group.current_user_role != 1 ? (
+                    <React.Fragment>
                       <Link to={"/groups/" + this.state.group.id + "/goals"}>
                         <Button variant="primary">Create Goal</Button>
                       </Link>
+                      <Link to={"/groups/" + this.state.group.id + "/members"}>
+                        <Button variant="primary">Manager member</Button>
+                      </Link>
+                    </React.Fragment>
                   ) : (
                   ""
                   )
