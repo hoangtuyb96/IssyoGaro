@@ -31,7 +31,7 @@ class ShowGoalContainer extends Component {
   async handleJoinGoal(group_id, goal_id) {
     const user_goal = await joinGoal(group_id, goal_id);
     console.log(user_goal);
-    window.location.reload(false); 
+    window.location.reload(false);
   }
 
   async handleLeaveGoal(group_id, goal_id, user_goal_id) {
