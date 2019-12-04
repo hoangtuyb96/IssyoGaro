@@ -3,7 +3,7 @@ class UserGoal < ApplicationRecord
 
   belongs_to :user
   belongs_to :goal
-  has_many :user_tasks
+  has_many :user_tasks, dependent: :destroy
 
   lambda_search_role = lambda do |user_id, goal_id|
     where user_id: user_id, goal_id: goal_id

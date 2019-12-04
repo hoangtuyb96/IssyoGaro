@@ -9,16 +9,13 @@ module GoalHelper
       "start_day": custom_time(goal.start_day),
       "end_day": custom_time(goal.end_day),
       "is_joined": ug.present? ? true : false,
-      "current_user_role": ug.present? ? ug.role : nil,
+      "user_goal_id": ug.present? ? ug.id : nil,
       "group_id": goal.group.id
     }
 
     goal_serializer[:tasks] =
     Serializers::Tasks::TaskSerializer.new(object: goal.tasks).serializer
 
-    if ug.present?
-      goal_serializer[:user_goal_id] = ug.id
-    end
     goal_serializer
   end
   # rubocop:enable Metrics/MethodLength

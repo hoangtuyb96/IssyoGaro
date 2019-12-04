@@ -1,7 +1,7 @@
 class Api::V1::GoalsController < Api::BaseController
   before_action :ensure_parameters_exist, only: :create
   before_action :check_admin, only: %i[create update]
-  before_action :find_object, only: %i[show update]
+  before_action :find_object, only: %i[show update destroy]
 
   def show
     render json: {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { joinGoal } from "../../redux/goals/join";
+import { leaveGoal } from "../../redux/goals/leave";
 
 class ShowGoalContainer extends Component {
   constructor(props) {
@@ -26,11 +28,39 @@ class ShowGoalContainer extends Component {
     });
   }
 
+  async handleJoinGoal(group_id, goal_id) {
+    const user_goal = await joinGoal(group_id, goal_id);
+    console.log(user_goal);
+    window.location.reload(false); 
+  }
+
+  async handleLeaveGoal(group_id, goal_id, user_goal_id) {
+    await leaveGoal(group_id, goal_id, user_goal_id);
+    window.location.reload(false);
+  }
+
   render() {
     return (
       <Container>
         { console.log(this.state.goal) }
         <h1 className="user_information">{this.state.goal.name}</h1>
+          { (this.state.goal.user_goal_id === null ) ? (
+              <div onClick={() => this.handleJoinGoal(
+                this.state.goal.group_id,
+                this.state.goal.id
+                )}>
+                <Button variant="primary" size="sm">Join</Button>
+              </div>
+            ) : (
+              <div onClick={() => this.handleLeaveGoal(
+                this.state.goal.group_id,
+                this.state.goal.id,
+                this.state.goal.user_goal_id
+              )}>
+                <Button variant="danger" size="sm">Leave</Button>
+              </div>
+            )
+          }
           <Row>
             <Col xs="3"></Col>
             <Col xs="3">Goal name:</Col>
