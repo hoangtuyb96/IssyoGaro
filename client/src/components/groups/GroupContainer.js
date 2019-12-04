@@ -126,7 +126,7 @@ class GroupContainer extends Component {
                           return (
                             <tr key={goal.id}>
                               <td>{goal.id}</td>
-                              <td>{goal.name}</td>
+                              <td><Link to={"/goals/" + goal.id}>{goal.name}</Link></td>
                               <td>{goal.description}</td>
                               <td>{goal.start_day}</td>
                               <td>{goal.end_day}</td>
@@ -143,7 +143,7 @@ class GroupContainer extends Component {
                   )
                 }
 
-                { this.state.group.current_user_role != 1 ? (
+                { this.state.group.current_user_role !== 1 ? (
                     <React.Fragment>
                       <Link to={"/groups/" + this.state.group.id + "/goals"}>
                         <Button variant="primary">Create Goal</Button>

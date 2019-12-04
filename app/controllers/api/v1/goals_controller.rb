@@ -6,10 +6,11 @@ class Api::V1::GoalsController < Api::BaseController
   def show
     render json: {
       messages: I18n.t("goals.show.success", goal_name: goal.name),
-      data: {
-        goal: Serializers::Goals::GoalSerializer
-          .new(object: goal).serializer
-      }
+      # data: {
+      #   goal: Serializers::Goals::GoalSerializer
+      #     .new(object: goal).serializer
+      # }
+      goal: ApplicationController.helpers.serializer_goal(goal, current_user.id)
     }, status: 200
   end
 

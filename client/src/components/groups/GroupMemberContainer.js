@@ -33,6 +33,7 @@ class GroupMemberContainer extends Component {
         return "Admin"
       case 3:
         return "Global Admin"
+      default:
     }
   }
 
@@ -79,14 +80,14 @@ class GroupMemberContainer extends Component {
                   </td>
                   <td>
                     {
-                      (this.getRole(user.role) == "Admin") ? 
+                      (this.getRole(user.role) === "Admin") ? 
                       ( 
                         <Link onClick={() => this.handleChangeAdmin(user.id)}>
                           Delete Admin
                         </Link>
                       ) :
                       (
-                        (this.getRole(user.role) == "Member") ?
+                        (this.getRole(user.role) === "Member") ?
                         (
                           <Link onClick={() => this.handleChangeAdmin(user.id)}>
                             Set Admin

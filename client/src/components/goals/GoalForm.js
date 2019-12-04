@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { createGoal } from '../../redux/goals/create';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class GoalForm extends Component {
   constructor(props) {
     super(props);
     this.emptyTask = {
       name: "",
-      desciptrion: "",
+      description: "",
       start_day: new Date(),
       end_day: new Date(),
       errors: {},
@@ -16,7 +18,7 @@ class GoalForm extends Component {
     this.state = {
       goal: {
         name: "",
-        desciptrion: "",
+        desciption: "",
         errors: {},
         tasks_attributes: [Object.assign({}, this.emptyTask)]
       }
@@ -48,11 +50,11 @@ class GoalForm extends Component {
             {this.renderGoalNameInlineError()}
           </div>
           <div className="form-group">
-            <label>Desciprtion</label>
+            <label>Description</label>
             <input
               type="text"
               onChange={e => this.handleGoalDescriptionChange(e)}
-              value={this.state.goal.desciptrion}
+              value={this.state.goal.desciption}
               className="form-control"
             />
           </div>
@@ -82,7 +84,7 @@ class GoalForm extends Component {
     e.preventDefault();
     const { group_id } = this.props.match.params
     const createdGoal = await createGoal(this.state.goal, {group_id: group_id});
-    console.log(createdGoal);
+    this.props.history.push("/goals/" + createdGoal.data.data.goal.id);
     // let submitMethod = this.state.goal.id ? 'patch' : 'post';
     // let url = this.state.goal.id
     //   ? `/goals/${this.state.goal.id}.json`
@@ -137,12 +139,38 @@ class GoalForm extends Component {
               </div>
               <div className="form-group">
                 <input
-                  placeholder="Desciprtion"
+                  placeholder="Description"
                   onChange={event => this.onTaskDescriptionChange(event, task)}
                   type="text"
-                  value={task.desciptrion}
+                  value={task.description}
                   className="form-control"
                 />
+              </div>
+              <div className="form-group">
+                <label>Start day</label>
+                <DatePicker
+                  selected={task.start_day}
+                  onChange={event => this.onTaskStartDayChange(event, task)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeCaption="time"
+                  dateFormat="yyyy/MM/dd h:mm aa"
+                  minDate={new Date()}
+                />
+              </div>
+              <div className="form-group">
+                <label>End day</label>
+                <DatePicker
+                  selected={task.end_day}
+                  onChange={event => this.onTaskEndDayChange(event, task)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeCaption="time"
+                  dateFormat="yyyy/MM/dd h:mm aa"
+                  minDate={task.start_day}
+                />
+              </div>
+              <div className="form-group">
               </div>
               {this.renderTaskInlineError(task)}
             </div>
@@ -188,7 +216,19 @@ class GoalForm extends Component {
   }
 
   onTaskDescriptionChange(event, task) {
-    task.desciptrion = event.target.value;
+    task.description = event.target.value;
+    this.setState({ goal: this.state.goal });
+    console.log(this.state);
+  }
+
+  onTaskStartDayChange(event, task) {
+    task.start_day = event;
+    this.setState({ goal: this.state.goal });
+    console.log(this.state);
+  }
+
+  onTaskEndDayChange(event, task) {
+    task.end_day = event;
     this.setState({ goal: this.state.goal });
     console.log(this.state);
   }
@@ -206,7 +246,7 @@ class GoalForm extends Component {
 
   handleGoalDescriptionChange(e) {
     let goal = this.state.goal;
-    goal.desciptrion = e.target.value;
+    goal.desciption = e.target.value;
     this.setState({ goal: this.state.goal });
   }
 }
