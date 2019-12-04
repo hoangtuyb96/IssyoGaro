@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { createGoal } from '../../redux/goals/create';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class GoalForm extends Component {
   constructor(props) {
@@ -144,6 +146,32 @@ class GoalForm extends Component {
                   className="form-control"
                 />
               </div>
+              <div className="form-group">
+                <label>Start day</label>
+                <DatePicker
+                  selected={task.start_day}
+                  onChange={event => this.onTaskStartDayChange(event, task)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeCaption="time"
+                  dateFormat="yyyy/MM/dd h:mm aa"
+                  minDate={new Date()}
+                />
+              </div>
+              <div className="form-group">
+                <label>End day</label>
+                <DatePicker
+                  selected={task.end_day}
+                  onChange={event => this.onTaskEndDayChange(event, task)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeCaption="time"
+                  dateFormat="yyyy/MM/dd h:mm aa"
+                  minDate={task.start_day}
+                />
+              </div>
+              <div className="form-group">
+              </div>
               {this.renderTaskInlineError(task)}
             </div>
           </div>
@@ -189,6 +217,18 @@ class GoalForm extends Component {
 
   onTaskDescriptionChange(event, task) {
     task.desciptrion = event.target.value;
+    this.setState({ goal: this.state.goal });
+    console.log(this.state);
+  }
+
+  onTaskStartDayChange(event, task) {
+    task.start_day = event;
+    this.setState({ goal: this.state.goal });
+    console.log(this.state);
+  }
+
+  onTaskEndDayChange(event, task) {
+    task.end_day = event;
     this.setState({ goal: this.state.goal });
     console.log(this.state);
   }

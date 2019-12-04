@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import GoalForm from './GoalForm';
 import { Container, Row, Col, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
 import axios from 'axios';
 
 class ShowGoalContainer extends Component {
@@ -49,20 +47,20 @@ class ShowGoalContainer extends Component {
             <Col xs="3"></Col>
 
             <Col xs="3"></Col>
-            <Col xs="3">Category:</Col>
-            {(this.state.goal.category == null) ? (
+            <Col xs="3">Start day:</Col>
+            {(this.state.goal.start_day == null) ? (
               <Col xs="3">None</Col>
             ) : (
-              <Col xs="3">{this.state.goal.adress}</Col>
+              <Col xs="3">{this.state.goal.start_day}</Col>
             )}
             <Col xs="3"></Col>
 
             <Col xs="3"></Col>
-            <Col xs="3">Type:</Col>
-            {this.state.goal.is_public ? (
-              <Col xs="3">Public</Col>
+            <Col xs="3">End day:</Col>
+            {(this.state.goal.end_day == null) ? (
+              <Col xs="3">None</Col>
             ) : (
-              <Col xs="3">Private</Col>
+              <Col xs="3">{this.state.goal.end_day}</Col>
             )}
             <Col xs="3"></Col>
 
