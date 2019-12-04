@@ -21,6 +21,26 @@ class Api::V1::UserGoalsController < Api::BaseController
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
+  def goal_progress
+    ug = UserGoal.search_role(params[:user_id], params[:goal_id]).take
+    render json: {
+      messages: I18n.t("user_goals.goal_progress.success",
+                       goal_name: goal(params[:goal_id]).name),
+      data: {
+        user: Serializers::Users::UserSimpleSerializer
+          .new(object: user(params[:user_id])).serializer,
+        goal: Serializers::Goals::GoalSimpleSerializer
+          .new(object: goal(params[:goal_id])).serializer,
+        goal_progress: ug.progress,
+        tasks: Serializers::UserTasks::UserTaskProgressSerializer
+          .new(object: ug.user_tasks).serializer,
+        honnin: params[:user_id].to_i.eql?(current_user.id) ? true : false
+      }
+    }, status: 200
+  end
+  # rubocop:enable Metrics/MethodLength
+
   private
 
   attr_reader :user_goal, :ug, :created_ug
@@ -55,8 +75,8 @@ class Api::V1::UserGoalsController < Api::BaseController
           .new(object: current_user).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal(params[:goal_id])).serializer,
-        goal_process: created_ug.process,
-        tasks: Serializers::UserTasks::UserTaskProcessSerializer
+        goal_progress: created_ug.progress,
+        tasks: Serializers::UserTasks::UserTaskProgressSerializer
           .new(object: filter_user_task).serializer
       }
     }, status: 200
@@ -85,8 +105,8 @@ class Api::V1::UserGoalsController < Api::BaseController
           .new(object: current_user).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal(params[:goal_id])).serializer,
-        goal_process: ug.process,
-        tasks: Serializers::UserTasks::UserTaskProcessSerializer
+        goal_progress: ug.progress,
+        tasks: Serializers::UserTasks::UserTaskProgressSerializer
           .new(object: filter_user_task).serializer
       }
     }, status: 409
@@ -107,5 +127,9 @@ class Api::V1::UserGoalsController < Api::BaseController
     render json: {
       messages: I18n.t("user_goals.destroy.success")
     }, status: 200
+  end
+
+  def user(user_id)
+    @user ||= User.find_by id: user_id
   end
 end

@@ -57,17 +57,17 @@ class Api::V1::UserTasksController < Api::BaseController
 
   def evaluate_another
     user_task.evaluate_user_id = current_user.id
-    user_task.update_attributes process: params[:user_task][:process]
-    update_goal_process
+    user_task.update_attributes progress: params[:user_task][:progress]
+    update_goal_progress
     evaluate_success
   end
 
-  def update_goal_process
+  def update_goal_progress
     @user_goal = user_task.user_goal
     user_tasks = user_goal.user_tasks
-    user_process =
-      (user_tasks.map(&:process).sum / user_tasks.count).round(3)
-    user_goal.update_attributes process: user_process
+    user_progress =
+      (user_tasks.map(&:progress).sum / user_tasks.count).round(3)
+    user_goal.update_attributes progress: user_progress
   end
 
   def evaluate_success
@@ -78,8 +78,8 @@ class Api::V1::UserTasksController < Api::BaseController
           .new(object: user).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal).serializer,
-        goal_process: user_goal.process,
-        tasks: Serializers::UserTasks::UserTaskProcessSerializer
+        goal_progress: user_goal.progress,
+        tasks: Serializers::UserTasks::UserTaskprogressSerializer
           .new(object: filter_user_task).serializer
       }
     }, status: 200

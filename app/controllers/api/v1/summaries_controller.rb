@@ -1,7 +1,7 @@
 class Api::V1::SummariesController < Api::BaseController
   def create
     if goal.achievements.blank?
-      @user_goals = goal.user_goals.sort_by(&:process).last(3).reverse
+      @user_goals = goal.user_goals.sort_by(&:progress).last(3).reverse
       create_achievement
       create_successful
     else

@@ -5,7 +5,7 @@ module GoalHelper
     goal_serializer = {
       "id": goal.id,
       "name": goal.name,
-      "description": goal.desciption,
+      "description": goal.description,
       "start_day": custom_time(goal.start_day),
       "end_day": custom_time(goal.end_day),
       "is_joined": ug.present? ? true : false,
