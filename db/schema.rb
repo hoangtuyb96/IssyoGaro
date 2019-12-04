@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_27_033104) do
+ActiveRecord::Schema.define(version: 2019_12_04_090922) do
 
   create_table "achievements", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "context"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_033104) do
     t.string "name"
     t.datetime "start_day"
     t.datetime "end_day"
-    t.text "desciption"
+    t.text "description"
     t.boolean "is_started", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_033104) do
   create_table "user_goals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.integer "goal_id"
-    t.float "process", default: 0.0
+    t.float "progress", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_group_id"
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 2019_11_27_033104) do
   create_table "user_tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "user_id"
     t.integer "task_id"
-    t.float "process"
+    t.float "progress"
     t.integer "evaluate_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

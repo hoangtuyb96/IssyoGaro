@@ -72,6 +72,8 @@ en:
       joined: "You already joined %{goal_name} campain"
     destroy:
       success: "You have abaddoned goal"
+    goal_progress:
+      success: "Show goal progress success"
   invites:
     create:
       success: "Invite success"

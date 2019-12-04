@@ -18,7 +18,7 @@ class GoalForm extends Component {
     this.state = {
       goal: {
         name: "",
-        desciption: "",
+        description: "",
         errors: {},
         tasks_attributes: [Object.assign({}, this.emptyTask)]
       }
@@ -54,7 +54,7 @@ class GoalForm extends Component {
             <input
               type="text"
               onChange={e => this.handleGoalDescriptionChange(e)}
-              value={this.state.goal.desciption}
+              value={this.state.goal.description}
               className="form-control"
             />
           </div>
@@ -246,7 +246,7 @@ class GoalForm extends Component {
 
   handleGoalDescriptionChange(e) {
     let goal = this.state.goal;
-    goal.desciption = e.target.value;
+    goal.description = e.target.value;
     this.setState({ goal: this.state.goal });
   }
 }
