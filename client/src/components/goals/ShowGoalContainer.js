@@ -17,7 +17,7 @@ class ShowGoalContainer extends Component {
       {headers: { "IG-AUTH-TOKEN": localStorage.getItem("auth-token")}})
     .then(response => {
       this.setState({
-        goal: response.data.data.goal,
+        goal: response.data.goal,
         loading: false
       })
     })
@@ -39,7 +39,7 @@ class ShowGoalContainer extends Component {
 
             <Col xs="3"></Col>
             <Col xs="3">Description:</Col>
-            {(this.state.goal.category == null) ? (
+            {(this.state.goal.description == null) ? (
               <Col xs="3">None</Col>
             ) : (
               <Col xs="3">{this.state.goal.description}</Col>

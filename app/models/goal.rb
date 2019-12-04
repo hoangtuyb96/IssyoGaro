@@ -1,5 +1,5 @@
 class Goal < ApplicationRecord
-  ATTRIBUTES_PARAMS = %i[name description].freeze
+  ATTRIBUTES_PARAMS = %i[name desciption].freeze
   has_many :user_goals
   has_many :users, through: :user_goals
   has_many :achievements

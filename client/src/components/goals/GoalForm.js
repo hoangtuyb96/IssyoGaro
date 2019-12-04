@@ -8,7 +8,7 @@ class GoalForm extends Component {
     super(props);
     this.emptyTask = {
       name: "",
-      desciptrion: "",
+      description: "",
       start_day: new Date(),
       end_day: new Date(),
       errors: {},
@@ -18,7 +18,7 @@ class GoalForm extends Component {
     this.state = {
       goal: {
         name: "",
-        desciptrion: "",
+        desciption: "",
         errors: {},
         tasks_attributes: [Object.assign({}, this.emptyTask)]
       }
@@ -50,11 +50,11 @@ class GoalForm extends Component {
             {this.renderGoalNameInlineError()}
           </div>
           <div className="form-group">
-            <label>Desciprtion</label>
+            <label>Description</label>
             <input
               type="text"
               onChange={e => this.handleGoalDescriptionChange(e)}
-              value={this.state.goal.desciptrion}
+              value={this.state.goal.desciption}
               className="form-control"
             />
           </div>
@@ -84,7 +84,7 @@ class GoalForm extends Component {
     e.preventDefault();
     const { group_id } = this.props.match.params
     const createdGoal = await createGoal(this.state.goal, {group_id: group_id});
-    console.log(createdGoal);
+    this.props.history.push("/goals/" + createdGoal.data.data.goal.id);
     // let submitMethod = this.state.goal.id ? 'patch' : 'post';
     // let url = this.state.goal.id
     //   ? `/goals/${this.state.goal.id}.json`
@@ -139,10 +139,10 @@ class GoalForm extends Component {
               </div>
               <div className="form-group">
                 <input
-                  placeholder="Desciprtion"
+                  placeholder="Description"
                   onChange={event => this.onTaskDescriptionChange(event, task)}
                   type="text"
-                  value={task.desciptrion}
+                  value={task.description}
                   className="form-control"
                 />
               </div>
@@ -216,7 +216,7 @@ class GoalForm extends Component {
   }
 
   onTaskDescriptionChange(event, task) {
-    task.desciptrion = event.target.value;
+    task.description = event.target.value;
     this.setState({ goal: this.state.goal });
     console.log(this.state);
   }
@@ -246,7 +246,7 @@ class GoalForm extends Component {
 
   handleGoalDescriptionChange(e) {
     let goal = this.state.goal;
-    goal.desciptrion = e.target.value;
+    goal.desciption = e.target.value;
     this.setState({ goal: this.state.goal });
   }
 }

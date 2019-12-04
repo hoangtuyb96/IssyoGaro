@@ -24,7 +24,7 @@ module GroupHelper
   # rubocop:enable Metrics/MethodLength
 
   def custom_time(time)
-    time.strftime("%H:%M:%S %d-%m-%Y")
+    time.strftime("%Y-%m-%d %H:%M:%S")
   end
 
   # rubocop:disable Metrics/MethodLength
