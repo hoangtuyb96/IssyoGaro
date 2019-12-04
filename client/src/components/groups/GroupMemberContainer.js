@@ -36,6 +36,17 @@ class GroupMemberContainer extends Component {
     }
   }
 
+  handleChangeAdmin(user_group_id) {
+    axios.patch("http://localhost:3001/api/user_groups/" + user_group_id)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    window.location.reload(false);
+  }
+
   render() {
     return (
       <div className="list-member">
@@ -53,6 +64,7 @@ class GroupMemberContainer extends Component {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Set Admin</th>
               </tr>
             </thead>
             <tbody>
@@ -64,6 +76,28 @@ class GroupMemberContainer extends Component {
                   <td>{user.user_info.email}</td>
                   <td>
                     {this.getRole(user.role)}
+                  </td>
+                  <td>
+                    {
+                      (this.getRole(user.role) == "Admin") ? 
+                      ( 
+                        <Link onClick={() => this.handleChangeAdmin(user.id)}>
+                          Delete Admin
+                        </Link>
+                      ) :
+                      (
+                        (this.getRole(user.role) == "Member") ?
+                        (
+                          <Link onClick={() => this.handleChangeAdmin(user.id)}>
+                            Set Admin
+                          </Link>
+                        )
+                        :
+                        (
+                          <p>Global Admin</p>
+                        )
+                      )
+                    }
                   </td>
                 </tr>
               )
