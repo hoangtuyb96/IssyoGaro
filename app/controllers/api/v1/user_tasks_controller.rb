@@ -1,6 +1,6 @@
 class Api::V1::UserTasksController < Api::BaseController
   before_action :ensure_parameters_exist, only: :update
-  before_action :find_user_task, only: :update
+  before_action :find_object, only: :update
 
   def update
     if goal.users.include? current_user
@@ -20,24 +20,19 @@ class Api::V1::UserTasksController < Api::BaseController
 
   attr_reader :user_task, :user_goal
 
-  def find_user_task
-    @user_task = UserTask.find_by task_id: params[:user_task][:task_id],
-                                  user_id: params[:user_task][:user_id]
-  end
-
   def goal
     user_task.task.goal
   end
 
   def user
-    User.find_by id: params[:user_task][:user_id]
+    User.find_by id: user_task.user_id
   end
 
   def filter_user_task
     final_fut = []
     goal.tasks.each do |task|
       final_fut.append(
-        task.user_tasks.where(user_id: params[:user_task][:user_id]).take
+        task.user_tasks.where(user_id: user_task.user_id).take
       )
     end
     final_fut
@@ -78,9 +73,13 @@ class Api::V1::UserTasksController < Api::BaseController
           .new(object: user).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal).serializer,
+        user_goal_id: user_goal.id,
         goal_progress: user_goal.progress,
-        tasks: Serializers::UserTasks::UserTaskprogressSerializer
-          .new(object: filter_user_task).serializer
+        tasks: Serializers::UserTasks::UserTaskProgressSerializer
+          .new(object: filter_user_task).serializer,
+        honnin: user.id.eql?(current_user.id) ? true : false,
+        joined_users: Serializers::Users::UserSimpleSerializer.new(
+          object: goal.users).serializer
       }
     }, status: 200
   end

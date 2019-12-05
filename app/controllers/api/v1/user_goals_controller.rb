@@ -32,10 +32,14 @@ class Api::V1::UserGoalsController < Api::BaseController
           .new(object: user(params[:user_id])).serializer,
         goal: Serializers::Goals::GoalSimpleSerializer
           .new(object: goal(params[:goal_id])).serializer,
+        user_goal_id: ug.id,
         goal_progress: ug.progress,
         tasks: Serializers::UserTasks::UserTaskProgressSerializer
           .new(object: ug.user_tasks).serializer,
-        honnin: params[:user_id].to_i.eql?(current_user.id) ? true : false
+        honnin: params[:user_id].to_i.eql?(current_user.id) ? true : false,
+        joined_users: Serializers::Users::UserSimpleSerializer.new(
+          object: goal(params[:goal_id]).users
+        ).serializer
       }
     }, status: 200
   end

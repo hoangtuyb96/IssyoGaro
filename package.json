@@ -3,7 +3,9 @@
   "private": true,
   "dependencies": {
     "history": "^4.10.1",
+    "rc-progress": "^2.5.2",
     "react-bootstrap-date-picker": "^5.1.0",
-    "react-datepicker": "^2.10.1"
+    "react-datepicker": "^2.10.1",
+    "react-rating": "^2.0.3"
   }
 }
