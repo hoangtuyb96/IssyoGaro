@@ -65,6 +65,7 @@ class Api::V1::UserTasksController < Api::BaseController
     user_goal.update_attributes progress: user_progress
   end
 
+  # rubocop:disable Metrics/MethodLength
   def evaluate_success
     render json: {
       messages: I18n.t("user_tasks.update.success"),
@@ -78,11 +79,12 @@ class Api::V1::UserTasksController < Api::BaseController
         tasks: Serializers::UserTasks::UserTaskProgressSerializer
           .new(object: filter_user_task).serializer,
         honnin: user.id.eql?(current_user.id) ? true : false,
-        joined_users: Serializers::Users::UserSimpleSerializer.new(
-          object: goal.users).serializer
+        joined_users: Serializers::Users::UserSimpleSerializer
+          .new(object: goal.users).serializer
       }
     }, status: 200
   end
+  # rubocop:enable Metrics/MethodLength
 
   def date_expired
     render json: {

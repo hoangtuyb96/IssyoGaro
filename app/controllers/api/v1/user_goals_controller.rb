@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 class Api::V1::UserGoalsController < Api::BaseController
   before_action :find_object, only: :destroy
 
@@ -137,3 +138,4 @@ class Api::V1::UserGoalsController < Api::BaseController
     @user ||= User.find_by id: user_id
   end
 end
+# rubocop:enable Metrics/ClassLength

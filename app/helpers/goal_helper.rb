@@ -14,7 +14,7 @@ module GoalHelper
     }
 
     goal_serializer[:tasks] =
-    Serializers::Tasks::TaskSerializer.new(object: goal.tasks).serializer
+      Serializers::Tasks::TaskSerializer.new(object: goal.tasks).serializer
 
     goal_serializer
   end
