@@ -6,6 +6,7 @@ import { Circle } from 'rc-progress';
 import { Link } from "react-router-dom";
 import Rating from 'react-rating';
 import { leaveGoal } from "../../redux/goals/leave";
+import Countdown from 'react-countdown-now';
 
 class ShowGoalByUserContainer extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class ShowGoalByUserContainer extends Component {
     }
 
     this.handleRate = this.handleRate.bind(this);
+    this.finishGoal = this.finishGoal.bind(this);
   }
 
   componentDidMount() {
@@ -68,6 +70,10 @@ class ShowGoalByUserContainer extends Component {
     this.props.history.push("/goals/" + user_goal_id);
   }
 
+  finishGoal() {
+    console.log('call finish di');
+  }
+
   render() {
     const circleContainerStyle = {
       width: '250px',
@@ -117,11 +123,17 @@ class ShowGoalByUserContainer extends Component {
                       <Col xs="8" style={{paddingTop: 40}}>
                         {this.state.data.goal.start_day}
                       </Col>
-                      <Col xs="4" style={{paddingTop: 40, paddingBottom: 40}}>
+                      <Col xs="4" style={{paddingTop: 40}}>
                         <b>End day:</b>
                       </Col>
-                      <Col xs="8" style={{paddingTop: 40, paddingBottom: 40}}>
+                      <Col xs="8" style={{paddingTop: 40}}>
                         {this.state.data.goal.end_day}
+                      </Col>
+                      <Col xs="4" style={{paddingTop: 40, paddingBottom: 40}}>
+                        <b>Time left:</b>
+                      </Col>
+                      <Col xs="8" style={{paddingTop: 40, paddingBottom: 40}}>
+                        <Countdown date={Date.now() + 10000} onComplete={() => this.finishGoal()}/>,
                       </Col>
                     </Row>
                   </Col>
@@ -184,13 +196,22 @@ class ShowGoalByUserContainer extends Component {
                     </React.Fragment>
                   )
                 })}
-                <div onClick={() => this.handleLeaveGoal(
-                  this.state.data.goal.group_id,
-                  this.state.data.goal.id,
-                  this.state.data.user_goal_id
-                )}>
-                  <Button variant="danger" size="sm">Leave</Button>
-                </div>
+                <Row>
+                  <Col xs="11">
+                    <Link to={"/goals/" + this.state.data.goal.id}>
+                      <Button variant="primary" size="sm">Back</Button>
+                    </Link>
+                  </Col>
+                  <Col xs="1">
+                    <div onClick={() => this.handleLeaveGoal(
+                      this.state.data.goal.group_id,
+                      this.state.data.goal.id,
+                      this.state.data.user_goal_id
+                    )}>
+                      <Button variant="danger" size="sm">Leave</Button>
+                    </div>
+                  </Col>
+                </Row>
               </Col>
               <Col xs="3">
                 <h3 style={{paddingLeft: 40}}>List member</h3>

@@ -3,6 +3,7 @@ import { Container, Row, Col, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { joinGoal } from "../../redux/goals/join";
 import { leaveGoal } from "../../redux/goals/leave";
+import { Link } from "react-router-dom";
 
 class ShowGoalContainer extends Component {
   constructor(props) {
@@ -54,13 +55,20 @@ class ShowGoalContainer extends Component {
                 <Button variant="primary" size="sm">Join</Button>
               </div>
             ) : (
-              <div onClick={() => this.handleLeaveGoal(
-                this.state.goal.group_id,
-                this.state.goal.id,
-                this.state.goal.user_goal_id
-              )}>
-                <Button variant="danger" size="sm">Leave</Button>
-              </div>
+              <Row>
+                <Col xs="9">
+                  <div onClick={() => this.handleLeaveGoal(
+                    this.state.goal.group_id,
+                    this.state.goal.id,
+                    this.state.goal.user_goal_id
+                  )}>
+                    <Button variant="danger" size="sm">Leave</Button>
+                  </div>
+                </Col>
+                <Col xs="3">
+                  <Link to={"/users/" + localStorage.getItem('user_id') + "/goals/" + this.state.goal.id + "/goal_progress"}>>>> to goal progress</Link>
+                </Col>
+              </Row>
             )
           }
           <Row>
