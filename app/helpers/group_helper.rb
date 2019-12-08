@@ -23,6 +23,25 @@ module GroupHelper
   # rubocop:enable Style/BracesAroundHashParameters
   # rubocop:enable Metrics/MethodLength
 
+  def serializer_groups_without_login(groups)
+    groups_serializer = []
+    groups.each do |group|
+      groups_serializer.append(
+        {
+          "id": group.id,
+          "name": group.name,
+          "description": group.description,
+          "cover": group.cover,
+          "is_public": group.is_public,
+          "category": group.category.present? ? group.category.name : nil,
+          "is_joined": nil,
+          "created_at": custom_time(group.created_at)
+        }
+      )
+    end
+    groups_serializer
+  end
+
   def custom_time(time)
     time.strftime("%Y-%m-%d %H:%M:%S")
   end

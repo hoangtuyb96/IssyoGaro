@@ -24,7 +24,8 @@ class HomePagesContainer extends Component {
     axios.get('http://localhost:3001/api/home')
     .then(response => {
       this.setState({
-        groups: response.data.groups
+        groups: response.data.groups,
+        is_loading: true
       })
     })
     .catch(error => console.log(error))
