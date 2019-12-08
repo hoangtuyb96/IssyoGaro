@@ -24,7 +24,8 @@ class ProfileContainer extends Component {
     super(props)
     this.state = {
       user: {},
-      groups_can_be_invited: []
+      groups_can_be_invited: [],
+      is_loading: true
     }
   }
 
@@ -34,8 +35,10 @@ class ProfileContainer extends Component {
     .then(response => {
       this.setState({
         user: response.data.data.user,
-        groups_can_be_invited: response.data.data.groups_can_be_invited
+        groups_can_be_invited: response.data.data.groups_can_be_invited,
+        is_loading: false
       })
+      console.log(this.state);
     })
     .catch(error => {
       console.log(error)
@@ -121,7 +124,44 @@ class ProfileContainer extends Component {
                   <strong className="text-muted d-block mb-2">
                     Achievements:
                   </strong>
-                  <span>sdfgdsfg</span>
+                  <span>
+                    <Row>
+                      { this.state.is_loading === false ? (
+                          this.state.user.achievement.length > 0 ? (
+                            <React.Fragment>
+                              { this.state.user.achievement.map(achi => {
+                                return(
+                                  <div className="achievement" key={achi.id}>
+                                    <Row>
+                                      <Col xs="3">
+                                        { achi.achievement_type === 1 ? (
+                                            <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                                          ) : (
+                                            achi.achievement_type === 2 ? (
+                                              <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
+                                            ) : (
+                                              <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
+                                            )
+                                          )
+                                        }
+                                      </Col>
+                                      <Col xs="9">
+                                        {achi.goal_id}<p>oiajsoidjasd</p>
+                                      </Col>
+                                    </Row>
+                                  </div>
+                                )
+                              })}
+                            </React.Fragment>
+                          ) : (
+                            "No achievement"
+                          )
+                        ) : (
+                          "Loading..."
+                        )
+                      }
+                    </Row>
+                  </span>
                 </ListGroupItem>
               </ListGroup>
             </Card>
