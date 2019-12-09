@@ -28,7 +28,6 @@ class App extends Component {
     return (
       <div>
         <Header {...this.props} isLogin={isLogin}/>
-        <hr />
         <Switch>
           <Route exact path="/" component={HomePagesContainer} />
           <Route exact path="/signup" component={SignupContainer} />
