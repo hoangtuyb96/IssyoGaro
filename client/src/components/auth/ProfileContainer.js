@@ -1,6 +1,7 @@
 import React, { Component, useState } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
+import {Image, Video, Transformation, CloudinaryContext} from 'cloudinary-react';
 
 class ProfileContainer extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class ProfileContainer extends Component {
       <div className="profile_user">
         <Container>
           <h1 className="user_information">{this.state.user.name}</h1>
+          <Image cloudName="my-stories" publicId={this.state.user.avatar} width="300" crop="scale" />
           <Invite receiver={this.state}/>
 
           <Row>

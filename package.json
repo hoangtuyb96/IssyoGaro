@@ -2,6 +2,7 @@
   "name": "IssyoGaro",
   "private": true,
   "dependencies": {
+    "cloudinary-react": "^1.2.1",
     "history": "^4.10.1",
     "rc-progress": "^2.5.2",
     "react-bootstrap-date-picker": "^5.1.0",
