@@ -43,6 +43,7 @@ class ProfileContainer extends Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <Container className="main-content-container px-4">
         <Row noGutters className="page-header py-4">
@@ -83,15 +84,19 @@ class ProfileContainer extends Component {
             <Card small className="mb-4 pt-3">
               <CardHeader className="border-bottom text-center">
                 <div className="mb-3 mx-auto">
-                  <Image className="rounded-circle" cloudName="my-stories" className="rounded-circle" publicId={this.state.user.avatar} alt="avatar">
-                    <Transformation width="110" height="110" crop="scale" radios="max"/>
-                  </Image>
-                  {/*<img
-                    className="rounded-circle"
-                    src={userDetails.avatar}
-                    alt={userDetails.name}
-                    width="110"
-                  />*/}
+                  { this.state.user.avatar === null ? (
+                      <img
+                        className="rounded-circle"
+                        src={ require("../../default-avatar.png")}
+                        alt="default-avatar"
+                        width="110"
+                      />
+                    ) : (
+                      <Image className="rounded-circle" cloudName="my-stories" className="rounded-circle" publicId={this.state.user.avatar} alt="avatar">
+                        <Transformation width="110" height="110" crop="scale" radios="max"/>
+                      </Image>
+                    )
+                  }
                 </div>
                 <h4 className="mb-0">{this.state.user.name}</h4>
                 {/*<span className="text-muted d-block mb-2">{userDetails.jobTitle}</span>

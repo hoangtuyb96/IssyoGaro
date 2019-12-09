@@ -8,6 +8,6 @@ class Serializers::Users::UserSerializer < Serializers::SupportSerializer
   end
 
   def avatar
-    object.avatar.file.filename
+    object.avatar.presence ? object.avatar.file.filename : nil
   end
 end
