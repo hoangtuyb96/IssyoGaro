@@ -3,6 +3,7 @@ import { Container, Row, Col, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { joinGoal } from "../../redux/goals/join";
 import { leaveGoal } from "../../redux/goals/leave";
+import { finishGoal } from "../../redux/goals/finish";
 import { Link } from "react-router-dom";
 
 class ShowGoalContainer extends Component {
@@ -42,11 +43,19 @@ class ShowGoalContainer extends Component {
     window.location.reload(false);
   }
 
+  async handleFinishGoal(goal_id) {
+    const goal = await finishGoal(goal_id);
+    console.log(goal);
+    this.setState({
+      goal: goal.data.goal,
+    })
+  }
+
   render() {
     return (
       <Container>
         { console.log(this.state.goal) }
-        <h1 className="user_information">{this.state.goal.name}</h1>
+        <h1 className="goal_information">{this.state.goal.name}</h1>
           { (this.state.goal.user_goal_id === null ) ? (
               <div onClick={() => this.handleJoinGoal(
                 this.state.goal.group_id,
@@ -145,6 +154,23 @@ class ShowGoalContainer extends Component {
               ) : (
               ""
             )}
+            { this.state.goal.is_admin ? (
+                this.state.goal.achievements.length === 0 ? (
+                  new Date(this.state.goal.end_day) > new Date() ? (
+                    ""
+                  ) : (
+                    <Col md={{ offset: 10 }}>
+                      <Button variant="primary" size="sm" onClick={goal_id => this.handleFinishGoal(this.state.goal.id)}>Finish goal</Button>
+                    </Col>
+                  )
+                ) : (
+                  ""
+                )
+              ) : (
+                ""
+              )
+            }
+              
           </Row>
       </Container>
     )
