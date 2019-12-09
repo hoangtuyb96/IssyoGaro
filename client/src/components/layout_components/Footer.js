@@ -5,7 +5,7 @@ class Footer extends Component {
   render() {
     return(
       <Container>
-        This is footer.
+        @ 2019. All Rights Reserved
       </Container>
     );
   }
