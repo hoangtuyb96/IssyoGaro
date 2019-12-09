@@ -61,8 +61,10 @@ class Api::V1::UserGoalsController < Api::BaseController
   end
 
   def join_goal_success
+    user_group = UserGroup.search_role(current_user.id, params[:group_id]).take
     @created_ug =
       UserGoal.create user_id: current_user.id, goal_id: params[:goal_id]
+                      
     goal(params[:goal_id]).tasks.each do |task|
       UserTask.create user_id: current_user.id, task_id: task.id,
                       user_goal_id: created_ug.id
