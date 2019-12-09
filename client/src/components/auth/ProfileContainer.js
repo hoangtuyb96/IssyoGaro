@@ -1,7 +1,23 @@
 import React, { Component, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
 import {Image, Video, Transformation, CloudinaryContext} from 'cloudinary-react';
+import { Modal, Button } from 'react-bootstrap';
+import PageTitle from "../common/PageTitle";
+import {
+  Container,
+  Card,
+  CardHeader,
+  ListGroup,
+  ListGroupItem,
+  Progress,
+  Row,
+  Col,
+  Form,
+  FormInput,
+  FormGroup,
+  FormTextarea,
+  FormSelect
+} from "shards-react";
 
 class ProfileContainer extends Component {
   constructor(props) {
@@ -28,40 +44,199 @@ class ProfileContainer extends Component {
 
   render() {
     return (
-      <div className="profile_user">
-        <Container>
-          <h1 className="user_information">{this.state.user.name}</h1>
-          <Image cloudName="my-stories" publicId={this.state.user.avatar} width="300" crop="scale" />
-          <Invite receiver={this.state}/>
+      <Container className="main-content-container px-4">
+        <Row noGutters className="page-header py-4">
+          <PageTitle title="User Profile" subtitle="Overview" md="12" className="ml-sm-auto mr-sm-auto" />
+        </Row>
+        {/*<Image cloudName="my-stories" publicId={this.state.user.avatar} width="110" crop="scale" />*/}
+        {/*<h1 className="user_information">{this.state.user.name}</h1>
+        <Invite receiver={this.state}/>
 
-          <Row>
-            <Col xs="3"></Col>
-            <Col xs="3">Full name:</Col>
-            <Col xs="3">{this.state.user.name}</Col>
-            <Col xs="3"></Col>
+        <Row>
+          <Col xs="3"></Col>
+          <Col xs="3">Full name:</Col>
+          <Col xs="3">{this.state.user.name}</Col>
+          <Col xs="3"></Col>
 
-            <Col xs="3"></Col>
-            <Col xs="3">Email:</Col>
-            <Col xs="3">{this.state.user.email}</Col>
-            <Col xs="3"></Col>
+          <Col xs="3"></Col>
+          <Col xs="3">Email:</Col>
+          <Col xs="3">{this.state.user.email}</Col>
+          <Col xs="3"></Col>
 
-            <Col xs="3"></Col>
-            <Col xs="3">Phone:</Col>
-            <Col xs="3">{this.state.user.phone}</Col>
-            <Col xs="3"></Col>
+          <Col xs="3"></Col>
+          <Col xs="3">Phone:</Col>
+          <Col xs="3">{this.state.user.phone}</Col>
+          <Col xs="3"></Col>
 
-            <Col xs="3"></Col>
-            <Col xs="3">Address:</Col>
-            <Col xs="3">{this.state.user.adress}</Col>
-            <Col xs="3"></Col>
+          <Col xs="3"></Col>
+          <Col xs="3">Address:</Col>
+          <Col xs="3">{this.state.user.adress}</Col>
+          <Col xs="3"></Col>
 
-            <Col xs="3"></Col>
-            <Col xs="3">Hobbies:</Col>
-            <Col xs="3">{this.state.user.hobby}</Col>
-            <Col xs="3"></Col>
-          </Row>
-        </Container>
-      </div>
+          <Col xs="3"></Col>
+          <Col xs="3">Hobbies:</Col>
+          <Col xs="3">{this.state.user.hobby}</Col>
+          <Col xs="3"></Col>
+        </Row>*/}
+        <Row>
+          <Col lg="4">
+            <Card small className="mb-4 pt-3">
+              <CardHeader className="border-bottom text-center">
+                <div className="mb-3 mx-auto">
+                  <Image className="rounded-circle" cloudName="my-stories" className="rounded-circle" publicId={this.state.user.avatar} alt="avatar">
+                    <Transformation width="110" height="110" crop="scale" radios="max"/>
+                  </Image>
+                  {/*<img
+                    className="rounded-circle"
+                    src={userDetails.avatar}
+                    alt={userDetails.name}
+                    width="110"
+                  />*/}
+                </div>
+                <h4 className="mb-0">{this.state.user.name}</h4>
+                {/*<span className="text-muted d-block mb-2">{userDetails.jobTitle}</span>
+                <Button pill outline size="sm" className="mb-2">
+                  <i className="material-icons mr-1">person_add</i> Follow
+                </Button>*/}
+              </CardHeader>
+              <ListGroup flush>
+                <ListGroupItem className="px-4">
+                  <div className="progress-wrapper">
+                    <strong className="text-muted d-block mb-2">
+                      Hobbies:
+                    </strong>
+                    { this.state.user.hobby === null ? (
+                        "None"
+                      ) : (
+                        <span>{this.state.user.hobby}</span>
+                      )}
+                  </div>
+                </ListGroupItem>
+                <ListGroupItem className="p-4">
+                  <strong className="text-muted d-block mb-2">
+                    Achievements:
+                  </strong>
+                  <span>sdfgdsfg</span>
+                </ListGroupItem>
+              </ListGroup>
+            </Card>
+          </Col>
+          <Col xs="8">
+            <Card small className="mb-4">
+              <CardHeader className="border-bottom">
+                <h6 className="m-0">User Details</h6>
+              </CardHeader>
+              <ListGroup flush>
+                <ListGroupItem className="p-3">
+                  <Row>
+                    <Col>
+                      <Form>
+                        <Row form>
+                          <Col md="6" className="form-group">
+                            <label htmlFor="feFullName">Fullname</label>
+                            <FormInput
+                              id="feFullName"
+                              placeholder="Full Name"
+                              value={this.state.user.name}
+                              onChange={() => {}}
+                            />
+                          </Col>
+                          <Col md="6" className="form-group">
+                            <label htmlFor="fePhoneNumber">Phone Number</label>
+                            <FormInput
+                              id="fePhoneNumber"
+                              placeholder="Phone Number"
+                              value={this.state.user.phone}
+                              onChange={() => {}}
+                            />
+                          </Col>
+                        </Row>
+                        <Row form>
+                          <Col md="6" className="form-group">
+                            <label htmlFor="feEmail">Email</label>
+                            <FormInput
+                              type="email"
+                              id="feEmail"
+                              placeholder="Email Address"
+                              value={this.state.user.email}
+                              onChange={() => {}}
+                              autoComplete="email"
+                            />
+                          </Col>
+                          <Col md="6" className="form-group">
+                            <label htmlFor="fePassword">Password</label>
+                            <FormInput
+                              type="password"
+                              id="fePassword"
+                              placeholder="Password"
+                              value=""
+                              onChange={() => {}}
+                              autoComplete="current-password"
+                            />
+                          </Col>
+                        </Row>
+                        <FormGroup>
+                          <label htmlFor="feAddress">Address</label>
+                          <FormInput
+                            id="feAddress"
+                            placeholder="Address"
+                            value={this.state.user.address}
+                            onChange={() => {}}
+                          />
+                        </FormGroup>
+                        {/*<Row form>
+                          <Col md="6" className="form-group">
+                            <label htmlFor="feCity">City</label>
+                            <FormInput
+                              id="feCity"
+                              placeholder="City"
+                              onChange={() => {}}
+                            />
+                          </Col>
+                          <Col md="4" className="form-group">
+                            <label htmlFor="feInputState">State</label>
+                            <FormSelect id="feInputState">
+                              <option>Choose...</option>
+                              <option>...</option>
+                            </FormSelect>
+                          </Col>
+                          <Col md="2" className="form-group">
+                            <label htmlFor="feZipCode">Zip</label>
+                            <FormInput
+                              id="feZipCode"
+                              placeholder="Zip"
+                              onChange={() => {}}
+                            />
+                          </Col>
+                        </Row>*/}
+                        <Row form>
+                          <Col md="12" className="form-group">
+                            <label htmlFor="feDescription">Hobbies</label>
+                            <FormTextarea
+                              id="feDescription"
+                              rows="5"
+                              placeholder="Hobbies"
+                              value={this.state.user.hobby}
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md="9">
+                            <Button variant="primary">Update Account</Button>
+                          </Col>
+                          <Col md="3">
+                            <Invite receiver={this.state}/>
+                          </Col>
+                        </Row>
+                      </Form>
+                    </Col>
+                  </Row>
+                </ListGroupItem>
+              </ListGroup>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     )
   }
 }
@@ -96,8 +271,9 @@ function Invite(receiver) {
         </Modal.Header>
         <Modal.Body>
           <Row>
+            { console.log(receiver)}
             { receiver.receiver.groups_can_be_invited.length === 0 ? (
-                "chua load xong"
+                "~~~Only Admin Can Invite People To Group~~~"
               ) : (
                 receiver.receiver.groups_can_be_invited.map( group => {
                   return (
@@ -127,9 +303,6 @@ function Invite(receiver) {
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
           </Button>
         </Modal.Footer>
       </Modal>
