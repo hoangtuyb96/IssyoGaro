@@ -9,6 +9,7 @@
     "react-bootstrap-modal": "^4.2.0",
     "react-countdown-now": "^2.1.2",
     "react-datepicker": "^2.10.1",
-    "react-rating": "^2.0.3"
+    "react-rating": "^2.0.3",
+    "shards-react": "^1.0.3"
   }
 }
