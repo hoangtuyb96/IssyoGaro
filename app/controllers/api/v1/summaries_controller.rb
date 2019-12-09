@@ -26,8 +26,10 @@ class Api::V1::SummariesController < Api::BaseController
   def create_successful
     render json: {
       messages: I18n.t("summaries.create.done"),
-      goal: ApplicationController.helpers
-        .serializer_goal(goal, current_user.id)
+      data: {
+        goal: Serializers::Goals::GoalWithAchievementSerializer
+          .new(object: goal).serializer
+      }
     }, status: 200
   end
 

@@ -67,7 +67,7 @@ class ShowGoalByUserContainer extends Component {
 
   async handleLeaveGoal(group_id, goal_id, user_goal_id) {
     await leaveGoal(group_id, goal_id, user_goal_id);
-    this.props.history.push("/goals/" + goal_id);
+    this.props.history.push("/goals/" + user_goal_id);
   }
 
   finishGoal() {
@@ -76,7 +76,6 @@ class ShowGoalByUserContainer extends Component {
 
   render() {
     const circleContainerStyle = {
-      paddingTop: '40px',
       width: '250px',
       height: '250px',
       display: 'inline-block',
@@ -134,7 +133,7 @@ class ShowGoalByUserContainer extends Component {
                         <b>Time left:</b>
                       </Col>
                       <Col xs="8" style={{paddingTop: 40, paddingBottom: 40}}>
-                        <Countdown date={this.state.data.goal.end_day} onComplete={() => this.finishGoal()}/>,
+                        <Countdown date={Date.now() + 10000} onComplete={() => this.finishGoal()}/>,
                       </Col>
                     </Row>
                   </Col>
@@ -145,7 +144,7 @@ class ShowGoalByUserContainer extends Component {
                         strokeColor="#FE8C6A" />
                     </div>
                     <br />
-                    <div style={{paddingLeft: 40, paddingTop: 40}}>Current progress: {this.state.data.goal_progress*100} %</div>
+                    <div style={{paddingLeft: 30}}>Current progress: {this.state.data.goal_progress*100} %</div>
                   </Col>
                 </Row>
                 <ColoredLine color="gray" />
