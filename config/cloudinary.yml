@@ -1,0 +1,9 @@
+development:
+  cloud_name: "my-stories"
+  api_key: "553612267177479"
+  api_secret: "n0_9JzXTppkepIroexUWCNnaCyo"
+
+production:
+  cloud_name: "my-stories"
+  api_key: "553612267177479"
+  api_secret: "n0_9JzXTppkepIroexUWCNnaCyo"
