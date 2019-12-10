@@ -52,8 +52,8 @@ class Api::V1::GroupsController < Api::BaseController
     render json: {
       messages: I18n.t("groups." + action + ".success"),
       data: {
-        group: Serializers::Groups::GroupSerializer
-          .new(object: group).serializer
+        group: ApplicationController.helpers
+                                    .serializer_group(group, current_user.id)
       }
     }, status: 200
   end
