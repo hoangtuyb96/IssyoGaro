@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Table } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { joinGroup } from '../../redux/groups/join';
 import { leaveGroup } from '../../redux/groups/leave';
+import PageTitle from "../common/PageTitle";
+import {
+  Container,
+  Card,
+  CardHeader,
+  Row,
+  Col,
+  Button,
+  CardBody,
+  CardFooter
+} from "shards-react";
 
 class GroupContainer extends Component {
   constructor(props) {
@@ -42,126 +52,164 @@ class GroupContainer extends Component {
   }
 
   render() {
+    const group = this.state.group;
     return (
       <div className="profile_user">
-        <Container>
-          <h1 className="user_information">{this.state.group.name}</h1>
-          { (this.state.group.current_user_role === null ) ? (
-              <div onClick={() => this.handleJoinGroup({user_group: {
-                user_id: localStorage.getItem("user_id"),
-                group_id: this.state.group.id
-              }})}>
-                <Button variant="primary" size="sm">Join</Button>
-              </div>
+        <Container className="main-content-container px-4">
+          { this.state.loading ? (
+            ""
             ) : (
-              <div onClick={() => this.handleLeaveGroup({
-                user_group_id: this.state.group.user_group_id
-              })}>
-                <Button variant="danger" size="sm">Leave</Button>
-              </div>
+              <React.Fragment>
+              <Row noGutters className="page-header py-4">
+                <PageTitle title="Group Information" subtitle="Overview" md="12" className="ml-sm-auto mr-sm-auto" />
+              </Row>
+              <Row>
+                <Col xs="5">
+                  <Card small className="mb-4 pt-3">
+                    <CardHeader className="border-bottom text-center">
+                      { group.cover !== null ? (
+                          <div
+                            className="card-post__image"
+                            style={{ backgroundImage: `url(https://res.cloudinary.com/my-stories/${group.cover})` }}
+                          >
+                          </div>
+                        ) : (
+                          <div
+                            className="card-post__image"
+                            style={{ backgroundImage: `url(${require("../../cover-default.jpg")})` }}
+                          >
+                          </div>
+                        )
+                      }
+                      <br />
+                      <h4 className="mb-0">
+                        <a href={"/groups/" + group.id} className="text-fiord-blue">
+                          {group.name}
+                        </a>
+                      </h4>
+                    </CardHeader>
+                    <CardBody>
+                      { group.description === null ? (
+                          "None description"
+                        ) : (
+                          <p className="card-text d-inline-block mb-3">{group.description}</p>
+                        )
+                      }
+                      <br />
+                      <br />
+                      <span className="text-muted">
+                        Category: {group.category === null ? ( "None" ) : ( group.category )}
+                      </span>
+                      <br />
+                      <br />
+                      <span className="text-muted">Created At: {group.created_at}</span>
+                      <br />
+                      <br />
+                      <span className="text">{ group.is_public ? ("Public Group") : ("Private Group") }</span>
+                      <br />
+                      <br />
+                      { group.current_user_role === null ? (
+                        ""
+                        ) : (
+                          <span className="test">Goal Amount: {group.goals.length}</span>
+                        )
+                      }
+                    </CardBody>
+                    { (this.state.group.current_user_role === null ) ? (
+                        <CardFooter className="border-top d-flex">
+                          <div className="border-top d-flex">
+                            <div onClick={() => this.handleJoinGroup({user_group: {
+                              user_id: localStorage.getItem("user_id"),
+                              group_id: this.state.group.id
+                            }})}>
+                              <Button variant="primary" size="sm">Join</Button>
+                            </div>
+                          </div>
+                        </CardFooter>
+                      ) : (
+                        <CardFooter className="border-top d-flex">
+                          <div className="my-auto ml-auto">
+                            <div onClick={() => this.handleLeaveGroup({
+                              user_group_id: this.state.group.user_group_id
+                            })}>
+                              <Button theme="danger" size="sm">Leave</Button>
+                            </div>
+                          </div>
+                        </CardFooter>
+                      )
+                    }
+                    <CardFooter className="border-top d-flex">
+                      { this.state.group.current_user_role === null ?
+                        (
+                          ""
+                        ) : ( group.current_user_role !== 1 ? (
+                            <React.Fragment>
+                              <div className="d-flex">
+                                <Link to={"/groups/" + this.state.group.id + "/goals"}>
+                                  <Button size="sm" theme="dark">Create Goal</Button>
+                                </Link>
+                              </div>
+                              <div className="my-auto ml-auto">
+                                <Link to={"/groups/" + this.state.group.id + "/members"}>
+                                  <Button size="sm" theme="dark">Members</Button>
+                                </Link>
+                              </div>
+                            </React.Fragment>
+                          ) : (
+                            ""
+                          )
+                        )
+                      }
+                    </CardFooter>
+                  </Card>
+                </Col>
+
+                <Col xs="7">
+                  { this.state.loading ?
+                    (
+                      ""
+                    ) : (
+                      group.current_user_role === null ? (
+                        'You can see all goals when join group'
+                      ) : (
+                        <Row>
+                        {group.goals.map((goal, idx) => (
+                          <Col lg="6" key={idx}>
+                            <Card small className="card-post mb-4">
+                              <CardBody>
+                                <Link to={"/goals/" + goal.id}>
+                                  <h5 className="card-title">{goal.name}</h5>
+                                  <p className="card-text text-muted">{goal.description === null ? ("No description") : (goal.description)}</p>
+                                </Link>
+                              </CardBody>
+                              <CardFooter className="border-top d-flex">
+                                <div className="d-flex">
+                                  <b>Start day</b>
+                                </div>
+                                <div className="my-auto ml-auto">
+                                  {goal.start_day}
+                                </div>
+                              </CardFooter>
+                              <CardFooter className="d-flex">
+                                <div className="d-flex">
+                                  <b>End day</b>
+                                </div>
+                                <div className="my-auto ml-auto">
+                                  {goal.end_day}
+                                </div>
+                              </CardFooter>
+                            </Card>
+                          </Col>
+                        ))}
+                      </Row>
+                      )
+                    )
+                  }
+                </Col>
+              </Row>
+            </React.Fragment>
             )
           }
-          <Row>
-            <Col xs="3"></Col>
-            <Col xs="3">Group name:</Col>
-            <Col xs="3">{this.state.group.name}</Col>
-            <Col xs="3"></Col>
-
-            <Col xs="3"></Col>
-            <Col xs="3">Description:</Col>
-            {(this.state.group.category == null) ? (
-              <Col xs="3">None</Col>
-            ) : (
-              <Col xs="3">{this.state.group.description}</Col>
-            )}
-            <Col xs="3"></Col>
-
-            <Col xs="3"></Col>
-            <Col xs="3">Category:</Col>
-            {(this.state.group.category == null) ? (
-              <Col xs="3">None</Col>
-            ) : (
-              <Col xs="3">{this.state.group.category}</Col>
-            )}
-            <Col xs="3"></Col>
-
-            <Col xs="3"></Col>
-            <Col xs="3">Type:</Col>
-            {this.state.group.is_public ? (
-              <Col xs="3">Public</Col>
-            ) : (
-              <Col xs="3">Private</Col>
-            )}
-            <Col xs="3"></Col>
-
-            { (this.state.group.current_user_role === null ) ? (
-              'You can see all goals without join group'
-              ) : (
-
-              <div className="goals_details">
-              <Row>
-                <Col xs="3"></Col>
-                <Col xs="3">Goals:</Col>
-                { !this.state.loading ? (
-                  <Col xs="3">{this.state.group.goals.length}</Col>
-                  ) : (
-                  ""
-                )}
-                <Col xs="3"></Col>
-
-                { !this.state.loading ? (
-                    this.state.group.goals.length > 0 ? (
-                      <Table striped bordered hover>
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Start day</th>
-                            <th>End day</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.group.goals.map( goal => {
-                          return (
-                            <tr key={goal.id}>
-                              <td>{goal.id}</td>
-                              <td><Link to={"/goals/" + goal.id}>{goal.name}</Link></td>
-                              <td>{goal.description}</td>
-                              <td>{goal.start_day}</td>
-                              <td>{goal.end_day}</td>
-                            </tr>
-                          )
-                        })}
-                        </tbody>
-                      </Table>
-                    ) : (
-                      ""
-                    )
-                  ) : (
-                  ""
-                  )
-                }
-
-                { this.state.group.current_user_role !== 1 ? (
-                    <React.Fragment>
-                      <Link to={"/groups/" + this.state.group.id + "/goals"}>
-                        <Button variant="primary">Create Goal</Button>
-                      </Link>
-                      <Link to={"/groups/" + this.state.group.id + "/members"}>
-                        <Button variant="primary">Manager member</Button>
-                      </Link>
-                    </React.Fragment>
-                  ) : (
-                  ""
-                  )
-                }
-              </Row>
-            </div>
-            )
-            }
-            
-          </Row>
         </Container>
       </div>
     )

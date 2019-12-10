@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import axios from 'axios';
-import {Image, Video, Transformation, CloudinaryContext} from 'cloudinary-react';
+import { Image, Transformation } from 'cloudinary-react';
 import { Modal, Button } from 'react-bootstrap';
 import PageTitle from "../common/PageTitle";
 import {
@@ -9,14 +9,12 @@ import {
   CardHeader,
   ListGroup,
   ListGroupItem,
-  Progress,
   Row,
   Col,
   Form,
   FormInput,
   FormGroup,
   FormTextarea,
-  FormSelect
 } from "shards-react";
 
 class ProfileContainer extends Component {
