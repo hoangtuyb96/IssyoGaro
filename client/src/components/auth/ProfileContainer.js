@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Image, Transformation } from 'cloudinary-react';
 import { Modal, Button } from 'react-bootstrap';
 import PageTitle from "../common/PageTitle";
+import { Link } from "react-router-dom";
 import {
   Container,
   Card,
@@ -129,25 +130,23 @@ class ProfileContainer extends Component {
                             <React.Fragment>
                               { this.state.user.achievement.map(achi => {
                                 return(
-                                  <div className="achievement" key={achi.id}>
-                                    <Row>
-                                      <Col xs="3">
-                                        { achi.achievement_type === 1 ? (
-                                            <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                                  <React.Fragment>
+                                    <Col xs="3" key={achi.id}>
+                                      { achi.achievement_type === 1 ? (
+                                          <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                                        ) : (
+                                          achi.achievement_type === 2 ? (
+                                            <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
                                           ) : (
-                                            achi.achievement_type === 2 ? (
-                                              <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
-                                            ) : (
-                                              <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
-                                            )
+                                            <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
                                           )
-                                        }
-                                      </Col>
-                                      <Col xs="9">
-                                        {achi.goal_id}<p>oiajsoidjasd</p>
-                                      </Col>
-                                    </Row>
-                                  </div>
+                                        )
+                                      }
+                                    </Col>
+                                    <Col xs="9">
+                                      <Link to={`/goals/${achi.goal_id}`}>{achi.goal_name}</Link>
+                                    </Col>
+                                  </React.Fragment>
                                 )
                               })}
                             </React.Fragment>
