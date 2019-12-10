@@ -13,6 +13,7 @@ import GroupMemberContainer from './components/groups/GroupMemberContainer';
 import CreateGoalContainer from './components/goals/CreateGoalContainer';
 import ShowGoalContainer from './components/goals/ShowGoalContainer';
 import ShowGoalByUserContainer from './components/goals/ShowGoalByUserContainer';
+import FourZeroFour from './components/errors/FourZeroFour';
 
 import axiosConfig from './axios_config';
 import { connect } from "react-redux";
@@ -41,6 +42,7 @@ class App extends Component {
           <Route exact path="/goals/:id" component={ShowGoalContainer} />
           <Route exact path="/groups/:group_id/members" component={GroupMemberContainer} />
           <Route exact path="/users/:user_id/goals/:goal_id/goal_progress" component={ShowGoalByUserContainer} />
+          <Route exact path="/404" component={FourZeroFour} />
         </Switch>
         <hr />
         <Footer />

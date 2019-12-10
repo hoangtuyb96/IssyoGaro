@@ -31,7 +31,10 @@ class ShowGoalByUserContainer extends Component {
       console.log(this.state.data)
     })
     .catch(error => {
-      console.log(error)
+      console.log(error.response)
+      if (error.response.status === 404) {
+        this.props.history.push("/404")
+      }
     })
   }
 
