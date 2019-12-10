@@ -5,6 +5,9 @@ import { joinGoal } from "../../redux/goals/join";
 import { leaveGoal } from "../../redux/goals/leave";
 import { finishGoal } from "../../redux/goals/finish";
 import { Link } from "react-router-dom";
+import {
+  ListGroupItem
+} from "shards-react";
 
 class ShowGoalContainer extends Component {
   constructor(props) {
@@ -52,6 +55,7 @@ class ShowGoalContainer extends Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <Container>
         <Row>
@@ -182,6 +186,42 @@ class ShowGoalContainer extends Component {
               }
                 
             </Row>
+          </Col>
+          <Col xs="3">
+            { this.state.loading === false ? (
+                this.state.goal.achievements.length > 0 ? (
+                    <ListGroupItem>
+                      <strong><h4 style={{ color: 'dark' }} className="goal_information">Top</h4></strong>
+                      { this.state.goal.achievements.map(achi => {
+                        return(
+                          <div className="achievement" key={achi.id}>
+                            <Row>
+                              <Col xs="3">
+                                { achi.achievement_type === 1 ? (
+                                    <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                                  ) : (
+                                    achi.achievement_type === 2 ? (
+                                      <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
+                                    ) : (
+                                      <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
+                                    )
+                                  )
+                                }
+                              </Col>
+                              <Col xs="9">
+                                <Link to={`/users/${achi.user_id}`}>{achi.user_name}</Link>
+                              </Col>
+                            </Row>
+                          </div>
+                        )
+                      })}
+                    </ListGroupItem>
+                  ) : (
+                    ""
+                  )
+              ) : (
+                ""
+            )}
           </Col>
         </Row>
       </Container>

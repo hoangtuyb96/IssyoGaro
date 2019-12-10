@@ -9,7 +9,7 @@ module GoalHelper
       "description": goal.description,
       "start_day": custom_time(goal.start_day),
       "end_day": custom_time(goal.end_day),
-      "achievements": goal.achievements,
+      "achievements": goal.achievements.blank? ? [] : Serializers::Achievements::AchievementSerializer.new(object: goal.achievements).serializer,
       "is_joined": ug.present? ? true : false,
       "is_admin": ugroup.role.eql?(1) ? false : true,
       "user_goal_id": ug.present? ? ug.id : nil,
