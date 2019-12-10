@@ -13,4 +13,6 @@ class Group < ApplicationRecord
   has_many :goals
 
   validates :name, presence: true, uniqueness: true
+
+  mount_uploader :cover, CoverUploader
 end

@@ -17,6 +17,8 @@ import ShowGoalByUserContainer from './components/goals/ShowGoalByUserContainer'
 import axiosConfig from './axios_config';
 import { connect } from "react-redux";
 
+import "./styles/shards-dashboards.1.1.0.min.css";
+
 class App extends Component {
   constructor(props){
     super(props);
