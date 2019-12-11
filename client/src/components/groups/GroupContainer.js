@@ -14,6 +14,7 @@ import {
   CardBody,
   CardFooter
 } from "shards-react";
+import { Snackbar } from "../../snackbar";
 
 class GroupContainer extends Component {
   constructor(props) {
@@ -24,7 +25,10 @@ class GroupContainer extends Component {
     }
   }
 
+  snackbarRef = React.createRef();
+
   componentDidMount() {
+    const snackbarRef = React.createRef();
     const { id } = this.props.match.params
     axios.get("http://localhost:3001/api/groups/" + id,
       {headers: { "IG-AUTH-TOKEN": localStorage.getItem("auth-token")}})
@@ -59,6 +63,17 @@ class GroupContainer extends Component {
     return (
       <div className="profile_user">
         <Container className="main-content-container px-4">
+        <Snackbar ref = {this.snackbarRef} />
+          { this.snackbarRef.current !== null ? (
+              this.props.history.location.state !== undefined ? (
+                this.snackbarRef.current.openSnackBar(this.props.history.location.state.message)
+              ) : (
+                ""
+              )
+            ) : (
+              ""
+            )
+          }
           { this.state.loading ? (
             ""
             ) : (
