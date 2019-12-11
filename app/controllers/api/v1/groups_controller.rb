@@ -1,6 +1,6 @@
 class Api::V1::GroupsController < Api::BaseController
   before_action :ensure_parameters_exist, only: %i[create update]
-  before_action :find_object, only: %i[show update]
+  before_action :find_object, only: %i[show update destroy]
 
   def show
     render json: {
@@ -24,6 +24,18 @@ class Api::V1::GroupsController < Api::BaseController
     if UserGroup.search_role(current_user.id, group.id).take&.role.equal? 3
       if group.update_attributes group_params
         action_successfully "update"
+      else
+        action_fail
+      end
+    else
+      require_permission
+    end
+  end
+
+  def destroy
+    if UserGroup.search_role(current_user.id, group.id).take&.role.equal? 3
+      if group.destroy
+        destroy_success
       else
         action_fail
       end
@@ -56,6 +68,12 @@ class Api::V1::GroupsController < Api::BaseController
                                     .serializer_group(group, current_user.id)
       }
     }, status: 200
+  end
+
+  def destroy_success
+    render json: {
+      messages: I18n.t("groups.destroy.success")
+    }, status: 204
   end
 
   def action_fail

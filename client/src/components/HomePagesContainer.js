@@ -13,6 +13,7 @@ import {
   Button
 } from "shards-react";
 import PageTitle from "./common/PageTitle";
+import { Snackbar } from "../snackbar";
 
 class HomePagesContainer extends Component {
   constructor(props) {
@@ -23,6 +24,8 @@ class HomePagesContainer extends Component {
     }
     this.handleJoinGroup = this.handleJoinGroup.bind(this);
   }
+
+  snackbarRef = React.createRef();
 
   async handleJoinGroup(event) {
     const user_group = await joinGroup(event.user_group);
@@ -46,6 +49,18 @@ class HomePagesContainer extends Component {
     console.log(this.state)
     return (
         <Container fluid className="main-content-container px-4">
+        <Snackbar ref = {this.snackbarRef} />
+          { this.snackbarRef.current !== null ? (
+              this.props.history.location.state !== undefined ? (
+                this.snackbarRef.current.openSnackBar(this.props.history.location.state.message),
+                this.props.history.replace({state: undefined})
+              ) : (
+                ""
+              )
+            ) : (
+              ""
+            )
+          }
           <Row noGutters className="page-header py-4">
             <PageTitle sm="4" title="Groups" subtitle="Homepage" className="text-sm-left" />
           </Row>

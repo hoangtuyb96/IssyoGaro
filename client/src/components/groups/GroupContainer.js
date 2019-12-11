@@ -28,7 +28,6 @@ class GroupContainer extends Component {
   snackbarRef = React.createRef();
 
   componentDidMount() {
-    const snackbarRef = React.createRef();
     const { id } = this.props.match.params
     axios.get("http://localhost:3001/api/groups/" + id,
       {headers: { "IG-AUTH-TOKEN": localStorage.getItem("auth-token")}})
@@ -56,6 +55,21 @@ class GroupContainer extends Component {
   async handleLeaveGroup(event) {
     await leaveGroup(event.user_group_id);
     window.location.reload(false);
+  }
+
+  handleDeleteGroup(event) {
+    if (window.confirm("Are you sure?")) {
+      console.log('ashjdoasd')
+      axios.delete("http://localhost:3001/api/groups/" + event.id)
+      .then(response => {
+        this.props.history.push({pathname: "/", state: {message: "Delete group successfully"}})
+      })
+      .catch(error => {
+        if (error.response.status === 404) {
+          this.props.history.push("/404")
+        }
+      })
+    }
   }
 
   render() {
@@ -147,6 +161,11 @@ class GroupContainer extends Component {
                         </CardFooter>
                       ) : (
                         <CardFooter className="border-top d-flex">
+                          <div className="d-flex">
+                            <div onClick={(event) => this.handleDeleteGroup(this.props.match.params)}>
+                              <Button theme="danger" size="sm">Delete Group</Button>
+                            </div>
+                          </div>
                           <div className="my-auto ml-auto">
                             <div onClick={() => this.handleLeaveGroup({
                               user_group_id: this.state.group.user_group_id

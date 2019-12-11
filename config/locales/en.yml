@@ -41,6 +41,8 @@ en:
     messages:
       user_not_found: "User not found"
   groups:
+    messages:
+      group_not_found: "Group not found"
     show:
       success: "Group %{group_name} has shown"
     create:
@@ -48,6 +50,8 @@ en:
       fail: "Create group fail"
     update:
       success: "Update group successful"
+    destroy:
+      success: "Delete group successfully"
   user_groups:
     create:
       success: "You have joined %{group_name} group"
