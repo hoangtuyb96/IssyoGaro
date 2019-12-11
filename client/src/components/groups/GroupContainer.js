@@ -53,8 +53,10 @@ class GroupContainer extends Component {
   }
 
   async handleLeaveGroup(event) {
-    await leaveGroup(event.user_group_id);
-    window.location.reload(false);
+    if (window.confirm("Are you sure?")) {
+      await leaveGroup(event.user_group_id);
+      window.location.reload(false);
+    }
   }
 
   handleDeleteGroup(event) {
