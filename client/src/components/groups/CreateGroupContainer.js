@@ -21,7 +21,7 @@ class CreateGroupContainer extends Component {
   async handleSubmit() {
     const createdGroup = await createGroup(this.state);
     this.props.dpCreateGroupSuccess(createdGroup);
-    this.props.history.push("groups/" + createdGroup.id)
+    this.props.history.push({pathname: "groups/" + createdGroup.id, state: {message: "Create group succesfully"}})
   }
 
   handleChange(event) {
