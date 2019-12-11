@@ -66,7 +66,8 @@ class GroupContainer extends Component {
         <Snackbar ref = {this.snackbarRef} />
           { this.snackbarRef.current !== null ? (
               this.props.history.location.state !== undefined ? (
-                this.snackbarRef.current.openSnackBar(this.props.history.location.state.message)
+                this.snackbarRef.current.openSnackBar(this.props.history.location.state.message),
+                this.props.history.replace({state: undefined})
               ) : (
                 ""
               )
