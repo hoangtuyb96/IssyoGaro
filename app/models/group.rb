@@ -3,7 +3,7 @@ class Group < ApplicationRecord
 
   belongs_to :category, optional: true
 
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :users, through: :user_groups
   has_many :achievements
   has_many :requests
