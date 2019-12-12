@@ -41,6 +41,7 @@ gem "faker"
 gem "simple_token_authentication", "~> 1.0"
 gem 'rack-cors', require: 'rack/cors'
 gem "carrierwave"
+gem 'carrierwave-base64'
 gem "cloudinary"
 
 group :development, :test do

@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 export const createGroup = async group => {
-  return await axios.post("http://localhost:3001/api/groups",
-    {group: group},
-    {headers: { "IG-AUTH-TOKEN": localStorage.getItem("auth-token")}})
+  return await axios.post(
+    "http://localhost:3001/api/groups",
+    {group: group}
+  )
   .then(response => {
     const group = response.data.data.group
     return group

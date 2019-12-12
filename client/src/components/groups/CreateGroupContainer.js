@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import { Container, Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { createGroup, createGroupSuccess } from '../../redux/groups/create';
+import axios from "axios";
+import {
+  Row,
+  Col,
+  FormGroup
+} from "shards-react";
+import FileBase64 from "react-file-base64";
+
 
 class CreateGroupContainer extends Component {
   constructor(props) {
@@ -9,17 +17,32 @@ class CreateGroupContainer extends Component {
     this.state = {
       name: "",
       description: "",
-      cover: "",
       category_id: "",
-      is_public: true
+      is_public: true,
+      cover: null,
+      is_loading: true,
+      categories: []
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentDidMount() {
+    axios.get("http://localhost:3001/api/categories")
+    .then(response => {
+      this.setState({
+        categories: response.data.categories
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
   async handleSubmit() {
     const createdGroup = await createGroup(this.state);
+    console.log(createdGroup)
     this.props.dpCreateGroupSuccess(createdGroup);
     this.props.history.push({pathname: "groups/" + createdGroup.id, state: {message: "Create group succesfully"}})
   }
@@ -30,40 +53,68 @@ class CreateGroupContainer extends Component {
     });
   }
 
+  getFiles(files){
+    this.setState({ cover: files[0].base64 })
+  }
+
   render() {
     return (
       <Container>
         <Form >
-          <Form.Group controlId="formName">
+          <FormGroup controlId="formName">
             <Form.Label>Group name</Form.Label>
             <Form.Control type="text"
               placeholder="Enter group name"
               value={this.state.name}
               name="name"
               onChange={this.handleChange} required />
-          </Form.Group>
+          </FormGroup>
 
-        <Form.Group controlId="formDescription">
+        <FormGroup controlId="formDescription">
             <Form.Label>Description</Form.Label>
             <Form.Control type="text"
               placeholder="Enter group description"
               value={this.state.description}
               name="description"
               onChange={this.handleChange} />
-          </Form.Group>
+          </FormGroup>
 
           <Form.Group controlId="formPublic">
-            <Form.Label>Group type</Form.Label>
-            <Form.Control as="select"
-              value={this.state.is_public}
-              name="is_public"
-              onChange={this.handleChange} required>
-                <option value="1">Public</option>
-                <option value="0">Private</option>
-            </Form.Control>
+            <Row>
+              <Col md="4" className="form-group">
+                <Form.Label>Group type</Form.Label>
+                <Form.Control as="select"
+                  value={this.state.is_public}
+                  name="is_public"
+                  onChange={this.handleChange} required>
+                    <option value="1">Public</option>
+                    <option value="0">Private</option>
+                </Form.Control>
+              </Col>
+              <Col md="4" className="form-group">
+                <Form.Label>Category</Form.Label>
+                <Form.Control as="select"
+                  value={this.state.category_id}
+                  name="category_id"
+                  onChange={this.handleChange} required>
+                    <option>Choose...</option>
+                    {this.state.categories.map(category => {
+                      return (
+                        <option value={category.id} key={category.id}>{category.name}</option>
+                      )
+                    })}
+                </Form.Control>
+              </Col>
+              <Col md="4" className="form-group">
+                <Form.Label>Cover image</Form.Label>
+                <FileBase64
+                  multiple={ true }
+                  onDone={ this.getFiles.bind(this) } />
+              </Col>
+            </Row>
           </Form.Group>
           <Button variant="primary" onClick={this.handleSubmit}>
-            Signup
+            Create group
           </Button>
         </Form>
       </Container>

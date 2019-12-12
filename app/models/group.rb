@@ -14,5 +14,5 @@ class Group < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
 
-  mount_uploader :cover, CoverUploader
+  mount_base64_uploader :cover, CoverUploader
 end
