@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Table, Button } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 import { joinGoal } from "../../redux/goals/join";
 import { leaveGoal } from "../../redux/goals/leave";
 import { finishGoal } from "../../redux/goals/finish";
 import { Link } from "react-router-dom";
 import {
-  ListGroupItem
+  ListGroupItem,
+  CardHeader,
+  CardBody,
+  CardFooter
 } from "shards-react";
+import { Snackbar } from "../../snackbar";
+import PageTitle from "../common/PageTitle";
 
 class ShowGoalContainer extends Component {
   constructor(props) {
@@ -17,6 +22,8 @@ class ShowGoalContainer extends Component {
       loading: true
     }
   }
+
+  snackbarRef = React.createRef();
 
   componentDidMount() {
     const { id } = this.props.match.params
@@ -45,188 +52,205 @@ class ShowGoalContainer extends Component {
   }
 
   async handleLeaveGoal(group_id, goal_id, user_goal_id) {
-    await leaveGoal(group_id, goal_id, user_goal_id);
-    window.location.reload(false);
+    if (window.confirm("Are you sure?")) {
+      await leaveGoal(group_id, goal_id, user_goal_id);
+      window.location.reload(false);
+    }
   }
 
   async handleFinishGoal(goal_id) {
     const goal = await finishGoal(goal_id);
-    console.log(goal);
     this.setState({
       goal: goal.data.goal,
     })
   }
 
   render() {
-    console.log(this.state)
+    const goal = this.state.goal
     return (
-      <Container>
-        <Row>
-          <Col xs="9">
-            { console.log(this.state.goal) }
-            { this.state.loading === false ? (
-                this.state.goal.achievements.length > 0 ? (
-                    <h1 style={{ color: 'gray' }} className="goal_information">{this.state.goal.name} (This goal is finished)</h1>
-                  ) : (
-                    <h1 className="goal_information">{this.state.goal.name}</h1>
-                  )
-              ) : (
-                ""
-            )}
-            { (this.state.goal.user_goal_id === null ) ? (
-                <div onClick={() => this.handleJoinGoal(
-                  this.state.goal.group_id,
-                  this.state.goal.id
-                  )}>
-                  <Button variant="primary" size="sm">Join</Button>
-                </div>
-              ) : (
-                <Row>
-                  <Col xs="9">
-                    <div onClick={() => this.handleLeaveGoal(
-                      this.state.goal.group_id,
-                      this.state.goal.id,
-                      this.state.goal.user_goal_id
-                    )}>
-                      <Button variant="danger" size="sm">Leave</Button>
-                    </div>
-                  </Col>
-                  <Col xs="3">
-                    <Link to={"/users/" + localStorage.getItem('user_id') + "/goals/" + this.state.goal.id + "/goal_progress"}>>>> to goal progress</Link>
-                  </Col>
-                </Row>
-              )
-            }
+      <Container className="main-content-container px-4">
+      <Snackbar ref = {this.snackbarRef} />
+        { this.state.loading ?
+          (
+            ""
+          ) :
+          (
             <Row>
-              <Col xs="3"></Col>
-              <Col xs="3">Goal name:</Col>
-              <Col xs="3">{this.state.goal.name}</Col>
-              <Col xs="3"></Col>
-
-              <Col xs="3"></Col>
-              <Col xs="3">Description:</Col>
-              {(this.state.goal.description == null) ? (
-                <Col xs="3">None</Col>
-              ) : (
-                <Col xs="3">{this.state.goal.description}</Col>
-              )}
-              <Col xs="3"></Col>
-
-              <Col xs="3"></Col>
-              <Col xs="3">Start day:</Col>
-              {(this.state.goal.start_day == null) ? (
-                <Col xs="3">None</Col>
-              ) : (
-                <Col xs="3">{this.state.goal.start_day}</Col>
-              )}
-              <Col xs="3"></Col>
-
-              <Col xs="3"></Col>
-              <Col xs="3">End day:</Col>
-              {(this.state.goal.end_day == null) ? (
-                <Col xs="3">None</Col>
-              ) : (
-                <Col xs="3">{this.state.goal.end_day}</Col>
-              )}
-              <Col xs="3"></Col>
-
-              <Col xs="3"></Col>
-              <Col xs="3">Goals:</Col>
-              { !this.state.loading ? (
-                <Col xs="3">{this.state.goal.tasks.length}</Col>
-                ) : (
-                ""
-              )}
-              <Col xs="3"></Col>
-
-              { !this.state.loading ? (
-                this.state.goal.tasks.length > 0 ? (
-                  <Table striped bordered hover>
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Start day</th>
-                        <th>End day</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {this.state.goal.tasks.map( goal => {
-                      return (
-                        <tr key={goal.id}>
-                          <td>{goal.id}</td>
-                          <td>{goal.name}</td>
-                          <td>{goal.description}</td>
-                          <td>{goal.start_day}</td>
-                          <td>{goal.end_day}</td>
-                        </tr>
-                      )
-                    })}
-                    </tbody>
-                  </Table>
-                ) : (
-                  ""
-                )
-                ) : (
-                ""
-              )}
-              { this.state.goal.is_admin ? (
-                  this.state.goal.achievements.length === 0 ? (
-                    new Date(this.state.goal.end_day) > new Date() ? (
-                      ""
+              <Col md="5">
+                <Row noGutters className="page-header py-4">
+                  <PageTitle title="Goal Information" subtitle="Overview" md="12" className="ml-sm-auto mr-sm-auto" />
+                </Row>
+                <Card className="mb-4">
+                  <CardHeader className="border-bottom text-center" style={{backgroundColor: "white"}}>
+                    <h4 className="mb-0">
+                      { goal.name }
+                    </h4>
+                  </CardHeader>
+                  <CardBody>
+                    <p className="card-text d-inline-block mb-3"><strong>Description:</strong> {goal.description === null ? ("None") : (goal.description)}</p>
+                    <br />
+                    <p className="card-text d-inline-block mb-3"><strong>Start day:</strong> {goal.start_day}</p>
+                    <br />
+                    <p className="card-text d-inline-block mb-3"><strong>End day:</strong> {goal.end_day}</p>
+                    <br />
+                    <p className="card-text d-inline-block mb-3"><strong>Task amount:</strong> {goal.tasks.length}</p>
+                  </CardBody>
+                  {goal.achievements.length > 0 ? 
+                    (
+                      <CardFooter>
+                          <strong align="center">
+                            <h4 className="goal_information">
+                              Top
+                            </h4>
+                          </strong>
+                          { goal.achievements.map(achi => {
+                            return(
+                              <Row>
+                                <Col md="9">
+                                  <div className="achievement" key={achi.id} style={{ display: "flex" }}>
+                                    <div style={{marginLeft: 10}}>
+                                      { achi.achievement_type === 1 ? (
+                                          <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                                        ) : (
+                                          achi.achievement_type === 2 ? (
+                                            <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
+                                          ) : (
+                                            <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
+                                          )
+                                        )
+                                      }
+                                    </div>
+                                    <div style={{marginLeft: 20, paddingTop: 5}}>
+                                      <Link to={`/users/${achi.user_id}`}>{achi.user_name}</Link>
+                                    </div>
+                                  </div>
+                                </Col>
+                                <Col md="3">
+                                  <div style={{marginRight: 10, paddingTop: 5}}>
+                                    <strong>{achi.progress*100}%</strong>
+                                  </div>
+                                </Col>
+                              </Row>
+                            )
+                          })}
+                      </CardFooter>
                     ) : (
-                      <Col md={{ offset: 10 }}>
-                        <Button variant="primary" size="sm" onClick={goal_id => this.handleFinishGoal(this.state.goal.id)}>Finish goal</Button>
-                      </Col>
+                      ""
                     )
-                  ) : (
-                    ""
-                  )
-                ) : (
-                  ""
-                )
-              }
-                
-            </Row>
-          </Col>
-          <Col xs="3">
-            { this.state.loading === false ? (
-                this.state.goal.achievements.length > 0 ? (
-                    <ListGroupItem>
-                      <strong><h4 style={{ color: 'dark' }} className="goal_information">Top</h4></strong>
-                      { this.state.goal.achievements.map(achi => {
-                        return(
-                          <div className="achievement" key={achi.id}>
-                            <Row>
-                              <Col xs="3">
-                                { achi.achievement_type === 1 ? (
-                                    <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                  }
+                  <CardFooter>
+                    <h5 className="mb-0">
+                      List members
+                    </h5>
+                    <Row>
+                      {goal.members.map(user => {
+                        return (
+                          <Col xs="3" style={{paddingTop: 15}} key={user.id}>
+                            <Link to={`/users/${user.id}/goals/${goal.id}/goal_progress`}>
+                              <Card style={{ width: '4rem' }}>
+                                {
+                                  user.avatar === null ? (
+                                    <Card.Img variant="top" src={ require("../../default-avatar.png")} />
                                   ) : (
-                                    achi.achievement_type === 2 ? (
-                                      <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
-                                    ) : (
-                                      <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
-                                    )
+                                    <Card.Img variant="top" height="62px" src={`https://res.cloudinary.com/my-stories/${user.avatar}`} />
                                   )
                                 }
-                              </Col>
-                              <Col xs="9">
-                                <Link to={`/users/${achi.user_id}`}>{achi.user_name}</Link>
-                              </Col>
-                            </Row>
-                          </div>
+                              </Card>
+                            </Link>
+                          </Col>
                         )
                       })}
-                    </ListGroupItem>
-                  ) : (
-                    ""
-                  )
-              ) : (
-                ""
-            )}
-          </Col>
-        </Row>
+                    </Row>
+                  </CardFooter>
+                  { this.state.goal.is_admin ? (
+                      this.state.goal.achievements.length === 0 ? (
+                        new Date(this.state.goal.end_day) > new Date() ? (
+                          ""
+                        ) : (
+                          <CardFooter>
+                            <div style={{ display: "flex" }}>
+                              <Button style={{marginLeft: "auto"}} variant="primary" size="sm" onClick={goal_id => this.handleFinishGoal(this.state.goal.id)}>
+                                Finish goal
+                              </Button>
+                            </div>
+                          </CardFooter>
+                        )
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      ""
+                    )
+                  }
+                </Card>
+              </Col>
+              <Col md="7">
+                <Row noGutters className="page-header py-4">
+                  <PageTitle title="Tasks" subtitle="Goal's" md="6" className="ml-sm-auto mr-sm-auto" />
+                  { (this.state.goal.user_goal_id === null ) ?
+                    (
+                      <Col md="6" style={{paddingTop: 25, paddingLeft: 230}}>
+                        <div onClick={() => this.handleJoinGoal(
+                          this.state.goal.group_id,
+                          this.state.goal.id
+                          )}>
+                          <Button variant="primary" size="sm">Join</Button>
+                        </div>
+                      </Col>
+                    ) : (
+                      <Col md="6" style={{paddingTop: 25}}>
+                        <Row>
+                          <Col md="8">
+                            <Link to={"/users/" + localStorage.getItem('user_id') + "/goals/" + this.state.goal.id + "/goal_progress"}>
+                              >>> to goal progress
+                            </Link>
+                          </Col>
+                          <Col md="4">
+                            <div onClick={() => this.handleLeaveGoal(
+                              this.state.goal.group_id,
+                              this.state.goal.id,
+                              this.state.goal.user_goal_id
+                            )}>
+                              <Button variant="danger" size="sm">Leave</Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                    )
+                  }
+                </Row>
+                <Row>
+                { goal.tasks.map(task => (
+                  <Col lg="6" key={task.id}>
+                    <Card small className="card-post mb-4">
+                      <CardBody>
+                        <h5 className="card-title">{task.name}</h5>
+                        <p className="card-text text-muted">{task.description === null ? ("No description") : (task.description)}</p>
+                      </CardBody>
+                      <CardFooter className="border-top d-flex">
+                        <div className="d-flex">
+                          <b>Start day</b>
+                        </div>
+                        <div className="my-auto ml-auto">
+                          {task.start_day}
+                        </div>
+                      </CardFooter>
+                      <CardFooter className="d-flex">
+                        <div className="d-flex">
+                          <b>End day</b>
+                        </div>
+                        <div className="my-auto ml-auto">
+                          {task.end_day}
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </Col>
+                ))}
+                </Row>
+              </Col>
+            </Row>
+          )
+        }
       </Container>
     )
   }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_04_090922) do
+ActiveRecord::Schema.define(version: 2019_12_12_073158) do
 
   create_table "achievements", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "context"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2019_12_04_090922) do
     t.integer "achievement_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "progress"
   end
 
   create_table "admins", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
