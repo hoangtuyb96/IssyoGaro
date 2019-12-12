@@ -14,7 +14,8 @@ module GoalHelper
       "is_joined": ug.present? ? true : false,
       "is_admin": ugroup.role.eql?(1) ? false : true,
       "user_goal_id": ug.present? ? ug.id : nil,
-      "group_id": goal.group.id
+      "group_id": goal.group.id,
+      "members": goal.users.blank? ? [] : Serializers::Users::MemberGroupSerializer.new(object: goal.users).serializer
     }
 
     goal_serializer[:tasks] =
