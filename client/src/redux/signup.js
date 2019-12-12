@@ -7,10 +7,11 @@ export const login = async user => {
       localStorage.setItem("auth-token", user_data.authentication_token);
       localStorage.setItem("name", user_data.name);
       localStorage.setItem("user_id", user_data.id);
-      return user_data
+      return resp
     })
     .catch(error => {
       console.log(error)
+      return error.response
     });
 }
 

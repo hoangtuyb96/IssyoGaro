@@ -35,7 +35,7 @@ class User < ApplicationRecord
     format: { with: VALID_EMAIL_REGEX }
   validates :name, presence: true, length: { maximum: 60 }
 
-  mount_uploader :avatar, AvatarUploader
+  mount_base64_uploader :avatar, AvatarUploader
 
   def generate_new_authentication_token
     token = User.generate_unique_secure_token
