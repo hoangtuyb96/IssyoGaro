@@ -54,7 +54,7 @@ class Header extends Component {
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
                   <Nav className="mr-sm-2">
-                    <Nav.Link href="/create_group">Craete Group</Nav.Link>
+                    <Nav.Link href="/create_group">Create Group</Nav.Link>
                     <NavDropdown title={ this.props.auth.currentUser.name } id="basic-nav-dropdown">
                       <NavDropdown.Item href={`/users/${localStorage.getItem('user_id')}`}>Profile</NavDropdown.Item>
                       <NavDropdown.Divider />
