@@ -97,7 +97,7 @@ class HomePagesContainer extends Component {
                               pill
                               className={`card-post__category bg-${colors[Math.floor(Math.random()*colors.length)]}`}
                             >
-                              {group.cover === null ? (
+                              {group.category === null ? (
                                   "None"
                                 ) : (
                                   group.category
