@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import Rating from 'react-rating';
 import { leaveGoal } from "../../redux/goals/leave";
 import Countdown from 'react-countdown-now';
+import { CardBody } from "shards-react";
 
 class ShowGoalByUserContainer extends Component {
   constructor(props) {
@@ -69,8 +70,10 @@ class ShowGoalByUserContainer extends Component {
   }
 
   async handleLeaveGoal(group_id, goal_id, user_goal_id) {
-    await leaveGoal(group_id, goal_id, user_goal_id);
-    this.props.history.push("/goals/" + goal_id);
+    if (window.confirm("Are you sure?")) {
+      await leaveGoal(group_id, goal_id, user_goal_id);
+      this.props.history.push("/goals/" + goal_id);
+    }
   }
 
   finishGoal() {
@@ -119,7 +122,7 @@ class ShowGoalByUserContainer extends Component {
                         <b>Description:</b>
                       </Col>
                       <Col xs="8" style={{paddingTop: 40}}>
-                        {this.state.data.goal.description}
+                        {this.state.data.goal.description === null ? ("None") : (this.state.data.goal.description)}
                       </Col>
                       <Col xs="4" style={{paddingTop: 40}}>
                         <b>Start day:</b>
@@ -154,59 +157,62 @@ class ShowGoalByUserContainer extends Component {
                 <ColoredLine color="gray" />
                 {this.state.data.tasks.map(task => {
                   return(
-                    <React.Fragment>
-                      <div className="task_progress" key={task.user_task_id}>
-                        <Row>
-                          <Col xs="7">
-                          <h3>Task {counter}:</h3>
-                            <Row>
-                              <Col xs="3">
-                                <b>Name:</b>
-                              </Col>
-                              <Col xs="9">
-                                {task.task.name}
-                              </Col>
-                              <Col xs="3">
-                                <b>Description</b>
-                              </Col>
-                              <Col xs="9">
-                                {task.task.description}
-                              </Col>
-                            </Row>
-                          </Col>
-                          <Col xs="5">
-                            <Row>
-                              <Col xs="12">
-                                { this.state.data.honnin === true ? 
-                                  (
-                                    <Rating initialRating={task.progress*5} readonly />
-                                  ) : (
-                                    <Rating initialRating={task.progress*5} onClick={(event, user_task_id) => this.handleRate(event, task.user_task_id)} />
-                                  )
-                                }
-                              </Col>
-                              <Col xs="6">
-                                <b>Start day</b>:
-                                <IndentLine />{task.task.start_day}
-                              </Col>
-                              <Col xs="6">
-                                <b>End day</b>:
-                                <IndentLine />{task.task.end_day}
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
-                      </div>
-                    </React.Fragment>
+                    <Card>
+                      <CardBody>
+                        <div className="task_progress" key={task.user_task_id}>
+                          <Row>
+                            <Col xs="7">
+                            <h3>Task {counter}:</h3>
+                              <Row>
+                                <Col xs="4">
+                                  <b>Name:</b>
+                                </Col>
+                                <Col xs="8">
+                                  {task.task.name}
+                                </Col>
+                                <Col xs="4">
+                                  <b>Description</b>
+                                </Col>
+                                <Col xs="8">
+                                  {task.task.description}
+                                </Col>
+                              </Row>
+                            </Col>
+                            <Col xs="5">
+                              <Row>
+                                <Col xs="12">
+                                  { this.state.data.honnin === true ? 
+                                    (
+                                      <Rating initialRating={task.progress*5} readonly />
+                                    ) : (
+                                      <Rating initialRating={task.progress*5} onClick={(event, user_task_id) => this.handleRate(event, task.user_task_id)} />
+                                    )
+                                  }
+                                </Col>
+                                <Col xs="6">
+                                  <b>Start day</b>:
+                                  <IndentLine />{task.task.start_day}
+                                </Col>
+                                <Col xs="6">
+                                  <b>End day</b>:
+                                  <IndentLine />{task.task.end_day}
+                                </Col>
+                              </Row>
+                            </Col>
+                          </Row>
+                        </div>
+                      </CardBody>
+                    </Card>
                   )
                 })}
-                <Row>
-                  <Col xs="11">
+                <br />
+                <div style={{display: "flex"}}>
+                  <div>
                     <Link to={"/goals/" + this.state.data.goal.id}>
                       <Button variant="primary" size="sm">Back</Button>
                     </Link>
-                  </Col>
-                  <Col xs="1">
+                  </div>
+                  <div style={{marginLeft: "auto"}}>
                     <div onClick={() => this.handleLeaveGoal(
                       this.state.data.goal.group_id,
                       this.state.data.goal.id,
@@ -214,8 +220,8 @@ class ShowGoalByUserContainer extends Component {
                     )}>
                       <Button variant="danger" size="sm">Leave</Button>
                     </div>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Col>
               <Col xs="3">
                 <h3 style={{paddingLeft: 40}}>List member</h3>
