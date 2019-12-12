@@ -17,6 +17,7 @@ import {
   FormGroup,
   FormTextarea,
 } from "shards-react";
+import { Snackbar } from "../../snackbar";
 
 class ProfileContainer extends Component {
   constructor(props) {
@@ -28,6 +29,8 @@ class ProfileContainer extends Component {
     }
   }
 
+  snackbarRef = React.createRef();
+
   componentDidMount() {
     const { id } = this.props.match.params
     axios.get("http://localhost:3001/api/users/" + id)
@@ -37,7 +40,6 @@ class ProfileContainer extends Component {
         groups_can_be_invited: response.data.data.groups_can_be_invited,
         is_loading: false
       })
-      console.log(this.state);
     })
     .catch(error => {
       console.log(error.response)
@@ -48,42 +50,23 @@ class ProfileContainer extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <Container className="main-content-container px-4">
+      <Snackbar ref = {this.snackbarRef} />
+        { this.snackbarRef.current !== null ? (
+            this.props.history.location.state !== undefined ? (
+              this.snackbarRef.current.openSnackBar(this.props.history.location.state.message),
+              this.props.history.replace({state: undefined})
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )
+        }
         <Row noGutters className="page-header py-4">
           <PageTitle title="User Profile" subtitle="Overview" md="12" className="ml-sm-auto mr-sm-auto" />
         </Row>
-        {/*<Image cloudName="my-stories" publicId={this.state.user.avatar} width="110" crop="scale" />*/}
-        {/*<h1 className="user_information">{this.state.user.name}</h1>
-        <Invite receiver={this.state}/>
-
-        <Row>
-          <Col xs="3"></Col>
-          <Col xs="3">Full name:</Col>
-          <Col xs="3">{this.state.user.name}</Col>
-          <Col xs="3"></Col>
-
-          <Col xs="3"></Col>
-          <Col xs="3">Email:</Col>
-          <Col xs="3">{this.state.user.email}</Col>
-          <Col xs="3"></Col>
-
-          <Col xs="3"></Col>
-          <Col xs="3">Phone:</Col>
-          <Col xs="3">{this.state.user.phone}</Col>
-          <Col xs="3"></Col>
-
-          <Col xs="3"></Col>
-          <Col xs="3">Address:</Col>
-          <Col xs="3">{this.state.user.adress}</Col>
-          <Col xs="3"></Col>
-
-          <Col xs="3"></Col>
-          <Col xs="3">Hobbies:</Col>
-          <Col xs="3">{this.state.user.hobby}</Col>
-          <Col xs="3"></Col>
-        </Row>*/}
         <Row>
           <Col lg="4">
             <Card small className="mb-4 pt-3">
@@ -127,40 +110,38 @@ class ProfileContainer extends Component {
                     Achievements:
                   </strong>
                   <span>
-                    <Row>
-                      { this.state.is_loading === false ? (
-                          this.state.user.achievement.length > 0 ? (
-                            <React.Fragment>
-                              { this.state.user.achievement.map(achi => {
-                                return(
-                                  <React.Fragment>
-                                    <Col xs="3" key={achi.id}>
-                                      { achi.achievement_type === 1 ? (
-                                          <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                    { this.state.is_loading === false ? (
+                        this.state.user.achievement.length > 0 ? (
+                          <React.Fragment>
+                            { this.state.user.achievement.map(achi => {
+                              return(
+                                <Row key={achi.id}>
+                                  <Col xs="3">
+                                    { achi.achievement_type === 1 ? (
+                                        <img src={ require("../../gold.svg")} heigh="40" width="40" alt="gold"/>
+                                      ) : (
+                                        achi.achievement_type === 2 ? (
+                                          <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
                                         ) : (
-                                          achi.achievement_type === 2 ? (
-                                            <img src={ require("../../silver.svg")} heigh="40" width="40" alt="silver"/>
-                                          ) : (
-                                            <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
-                                          )
+                                          <img src={ require("../../bronze.svg")} heigh="40" width="40" alt="bronze"/>
                                         )
-                                      }
-                                    </Col>
-                                    <Col xs="9">
-                                      <Link to={`/goals/${achi.goal_id}`}>{achi.goal_name}</Link>
-                                    </Col>
-                                  </React.Fragment>
-                                )
-                              })}
-                            </React.Fragment>
-                          ) : (
-                            "No achievement"
-                          )
+                                      )
+                                    }
+                                  </Col>
+                                  <Col xs="9">
+                                    <Link to={`/goals/${achi.goal_id}`}>{achi.goal_name}</Link>
+                                  </Col>
+                                </Row>
+                              )
+                            })}
+                          </React.Fragment>
                         ) : (
-                          "Loading..."
+                          "No achievement"
                         )
-                      }
-                    </Row>
+                      ) : (
+                        "Loading..."
+                      )
+                    }
                   </span>
                 </ListGroupItem>
               </ListGroup>
@@ -203,8 +184,8 @@ class ProfileContainer extends Component {
                               type="email"
                               id="feEmail"
                               placeholder="Email Address"
-                              value={this.state.user.email}
                               onChange={() => {}}
+                              value={this.state.user.email}
                               autoComplete="email"
                             />
                           </Col>
@@ -229,31 +210,6 @@ class ProfileContainer extends Component {
                             onChange={() => {}}
                           />
                         </FormGroup>
-                        {/*<Row form>
-                          <Col md="6" className="form-group">
-                            <label htmlFor="feCity">City</label>
-                            <FormInput
-                              id="feCity"
-                              placeholder="City"
-                              onChange={() => {}}
-                            />
-                          </Col>
-                          <Col md="4" className="form-group">
-                            <label htmlFor="feInputState">State</label>
-                            <FormSelect id="feInputState">
-                              <option>Choose...</option>
-                              <option>...</option>
-                            </FormSelect>
-                          </Col>
-                          <Col md="2" className="form-group">
-                            <label htmlFor="feZipCode">Zip</label>
-                            <FormInput
-                              id="feZipCode"
-                              placeholder="Zip"
-                              onChange={() => {}}
-                            />
-                          </Col>
-                        </Row>*/}
                         <Row form>
                           <Col md="12" className="form-group">
                             <label htmlFor="feDescription">Hobbies</label>
@@ -261,6 +217,7 @@ class ProfileContainer extends Component {
                               id="feDescription"
                               rows="5"
                               placeholder="Hobbies"
+                              onChange={() => {}}
                               value={this.state.user.hobby}
                             />
                           </Col>
@@ -316,29 +273,28 @@ function Invite(receiver) {
         </Modal.Header>
         <Modal.Body>
           <Row>
-            { console.log(receiver)}
             { receiver.receiver.groups_can_be_invited.length === 0 ? (
                 "~~~Only Admin Can Invite People To Group~~~"
               ) : (
                 receiver.receiver.groups_can_be_invited.map( group => {
                   return (
-                    <React.Fragment>
-                    <Col xs="9">
-                      {group.group_name}
-                    </Col>
-                    <Col xs="3">
-                      { group.is_joined ? (
-                          <Button variant="success" size="sm">Joined</Button>
-                        ) : (
-                          group.is_invited ? (
-                            <Button variant="secondary" size="sm">Invited</Button>
+                    <Row key={group.id}>
+                      <Col xs="9">
+                        {group.group_name}
+                      </Col>
+                      <Col xs="3">
+                        { group.is_joined ? (
+                            <Button variant="success" size="sm">Joined</Button>
                           ) : (
-                            <Button variant="primary" size="sm" onClick={group_id => handleInvite(group.group_id)}>Invite</Button>
+                            group.is_invited ? (
+                              <Button variant="secondary" size="sm">Invited</Button>
+                            ) : (
+                              <Button variant="primary" size="sm" onClick={group_id => handleInvite(group.group_id)}>Invite</Button>
+                            )
                           )
-                        )
-                      }
-                    </Col>
-                  </React.Fragment>
+                        }
+                      </Col>
+                    </Row>
                   )
                 })
               )
