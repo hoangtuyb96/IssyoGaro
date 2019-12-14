@@ -17,5 +17,14 @@ rails db:migrate
 rails db:migrate:create
 rails db:seed
 
+* Install frontend dependency
+`yarn install` or `npm install`
+
+* Install foremane
+gem install foreman
+
+* Start development server
+foreman start -p $port
+
 * How to run the test suite
 rspec ./spec
