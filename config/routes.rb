@@ -5,7 +5,9 @@ class ActionDispatch::Routing::Mapper
 end
 
 Rails.application.routes.draw do
+  root to: "pages#root"
   draw :api
   devise_for :users
+  get "*path", to: "pages#root"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
