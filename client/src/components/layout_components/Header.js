@@ -3,6 +3,7 @@ import { Container } from 'reactstrap';
 import { connect } from "react-redux"
 import { logout, logoutUserSuccess } from "../../redux/logout"
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { ActionCable } from "react-actioncable-provider";
 
 class Header extends Component {
   constructor(props) {
@@ -18,10 +19,18 @@ class Header extends Component {
     this.props.history.push("/");
   }
 
+  handleReceive = response => {
+    console.log(response)
+  }
+
   render() {
     const {isLogin} = this.props;
     return (
       <Container>
+        <ActionCable
+          channel={{ channel: "NotificationChannel"}}
+          onReceived={this.handleReceive}
+        />
         <div className="header">
           <Navbar expand="lg">
             <Navbar.Brand href="/">

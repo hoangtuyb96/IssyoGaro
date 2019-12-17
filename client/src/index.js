@@ -10,6 +10,7 @@ import thunk from 'redux-thunk';
 
 import App from './App';
 import authReducer from './reducers/authReducer';
+import { ActionCableProvider } from "react-actioncable-provider";
 
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -36,9 +37,11 @@ const store = createStore(
 
 const routing = (
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <ActionCableProvider url={"ws://localhost:3001/cable?token=" + localStorage.getItem('auth-token')}>
+      <Router>
+        <App />
+      </Router>
+    </ActionCableProvider>
   </Provider>
 );
 
