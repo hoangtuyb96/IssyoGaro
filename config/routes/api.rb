@@ -27,6 +27,7 @@ namespace :api, defaults: {format: "json"} do
       end
       resources :user_tasks, only: :update
       resources :categories, only: :index
+      resources :notifications, only: :index
       get "home", to: "home_pages#index"
     end
 end

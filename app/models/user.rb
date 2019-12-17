@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_many :comments
   has_many :votes
   has_many :notifications
+  has_many :sent_notifications, class_name: Notification.name, foreign_key: :sender_id
 
   validates :email,
     presence: true,

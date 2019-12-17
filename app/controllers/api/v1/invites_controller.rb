@@ -14,6 +14,8 @@ class Api::V1::InvitesController < Api::BaseController
 
   private
 
+  attr_reader :invite
+
   def group(group_id)
     @group ||= Group.find_by id: group_id
   end
@@ -23,8 +25,10 @@ class Api::V1::InvitesController < Api::BaseController
   end
 
   def invite_to_group
-    Invite.create(sender_id: current_user.id, receiver_id: params[:user_id],
+    @invite = Invite.create(sender_id: current_user.id, receiver_id: params[:user_id],
                   group_id: params[:group_id])
+    create_notification
+    send_notification
     render json: {
       messages: I18n.t("invites.create.success",
                        group_name: group(params[:group_id]).name),
@@ -49,5 +53,23 @@ class Api::V1::InvitesController < Api::BaseController
       data: { group: Serializers::Groups::GroupSerializer
         .new(object: group(params[:group_id])) }
     }, data: 409
+  end
+
+  def create_notification
+    Notification.create user_id: params[:user_id],
+      sender_id: current_user.id,
+      notificationable_type: "Invite",
+      notificationable_id: invite.id,
+      target_id: params[:group_id],
+      context: user(current_user.id).name + " has invited you to " + group(params[:group_id]).name
+  end
+
+  def send_notification
+    notifications = User.find_by(id: params[:user_id]).notifications
+    NotificationJob.perform_now(
+      params[:user_id],
+      Serializers::Notifications::NotificationSerializer
+        .new(object: notifications).serializer
+    )
   end
 end

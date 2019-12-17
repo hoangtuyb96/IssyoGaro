@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   draw :api
   devise_for :users
   get "*path", to: "pages#root"
+  mount ActionCable.server => '/cable'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
