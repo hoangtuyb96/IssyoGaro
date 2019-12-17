@@ -1,4 +1,6 @@
 class Invite < ApplicationRecord
+  before_save :default_is_accepted
+
   validates :sender_id, presence: true
   validates :receiver_id, presence: true
   validates :group_id, presence: :true
@@ -13,4 +15,8 @@ class Invite < ApplicationRecord
   end
 
   scope :search_invite, lambda_search_invite
+
+  def default_is_accepted
+    self.is_accepted ||= false
+  end
 end

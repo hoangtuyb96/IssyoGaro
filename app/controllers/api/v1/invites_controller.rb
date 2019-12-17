@@ -28,6 +28,7 @@ class Api::V1::InvitesController < Api::BaseController
     @invite = Invite.create(sender_id: current_user.id, receiver_id: params[:user_id],
                   group_id: params[:group_id])
     create_notification
+    send_notification
     render json: {
       messages: I18n.t("invites.create.success",
                        group_name: group(params[:group_id]).name),
@@ -61,5 +62,14 @@ class Api::V1::InvitesController < Api::BaseController
       notificationable_id: invite.id,
       target_id: params[:group_id],
       context: user(current_user.id).name + " has invited you to " + group(params[:group_id]).name
+  end
+
+  def send_notification
+    notifications = User.find_by(id: params[:user_id]).notifications
+    NotificationJob.perform_now(
+      params[:user_id],
+      Serializers::Notifications::NotificationSerializer
+        .new(object: notifications).serializer
+    )
   end
 end
