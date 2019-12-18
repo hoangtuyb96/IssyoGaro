@@ -3,7 +3,7 @@ import { Container } from 'reactstrap';
 import { connect } from "react-redux"
 import { logout, logoutUserSuccess } from "../../redux/logout"
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { ActionCable } from "react-actioncable-provider";
+import { ActionCableConsumer } from "react-actioncable-provider";
 import { NavLink, Badge, Collapse, DropdownItem } from "shards-react";
 import axios from "axios";
 
@@ -56,7 +56,7 @@ class Header extends Component {
     const {isLogin} = this.props;
     return (
       <Container>
-        <ActionCable
+        <ActionCableConsumer
           channel={{ channel: "NotificationChannel"}}
           onReceived={this.handleReceive}
         />
