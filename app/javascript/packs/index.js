@@ -10,7 +10,10 @@ import thunk from 'redux-thunk';
 
 import App from '../App';
 import authReducer from '../reducers/authReducer';
+import { ActionCableProvider } from "react-actioncable-provider";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../../../node_modules/font-awesome/css/font-awesome.min.css';
+
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 const enhancer = composeEnhancers(
@@ -29,9 +32,11 @@ const store = createStore(
 
 const routing = (
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <ActionCableProvider url={"wss://issyogaro.herokuapp.com/cable?token=" + localStorage.getItem('auth-token')}>
+      <Router>
+        <App />
+      </Router>
+    </ActionCableProvider>
   </Provider>
 );
 
