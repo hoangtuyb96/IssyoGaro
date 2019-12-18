@@ -1,13 +1,14 @@
 import React, { Component, useState } from 'react';
 import axios from 'axios';
 import { Image, Transformation } from 'cloudinary-react';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import PageTitle from "../common/PageTitle";
 import { Link } from "react-router-dom";
 import {
   Container,
   Card,
   CardHeader,
+  CardFooter,
   ListGroup,
   ListGroupItem,
   Row,
@@ -18,6 +19,20 @@ import {
   FormTextarea,
 } from "shards-react";
 import { Snackbar } from "../../snackbar";
+import Modal from "react-modal";
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+Modal.setAppElement('#root-container')
 
 class ProfileContainer extends Component {
   constructor(props) {
@@ -25,7 +40,8 @@ class ProfileContainer extends Component {
     this.state = {
       user: {},
       groups_can_be_invited: [],
-      is_loading: true
+      is_loading: true,
+      modalIsOpen: false
     }
   }
 
@@ -47,6 +63,20 @@ class ProfileContainer extends Component {
         this.props.history.push("/404")
       }
     });
+  }
+
+  handleShow = () => {
+    this.setState({modalIsOpen: true})
+  }
+
+  handleClose = () => {
+    this.setState({modalIsOpen: false})
+  }
+
+  handleInvite = (group_id) => {
+    axios.post("/api/invites/",
+      {user_id: this.state.user.id, group_id: group_id});
+    window.location.reload(false);
   }
 
   render() {
@@ -227,7 +257,54 @@ class ProfileContainer extends Component {
                             <Button variant="primary">Update Account</Button>
                           </Col>
                           <Col md="3">
-                            <Invite receiver={this.state}/>
+                            {this.state.is_loading ?
+                              (
+                                "Loading..."
+                              ) : (
+                                <Button onClick={this.handleShow}> Invite to group</Button>
+                              )
+                            }
+
+                            <Modal
+                              isOpen={this.state.modalIsOpen}
+                              onRequestClose={this.handleClose}
+                              style={customStyles}
+                              contentLabel="Example Modal"
+                            >
+
+                              <Card small className="mb-4 pt-3">
+                                <CardHeader className="border-bottom text-center" style={{backgroundColor: "white"}}>
+                                  <h3>List Groups</h3>
+                                </CardHeader>
+                                { this.state.groups_can_be_invited.length === 0 ?
+                                  (
+                                    "~~~Only Admin Can Invite People To Group~~~"
+                                  ) : (
+                                    this.state.groups_can_be_invited.map(group => {
+                                      return (
+                                        <CardFooter className="d-flex" style={{backgroundColor: "white", width: 500}}>
+                                          <div className="d-flex">
+                                            {group.group_name}
+                                          </div>
+                                          <div className="my-auto ml-auto">
+                                            { group.is_joined ? (
+                                                <Button variant="success" size="sm">Joined</Button>
+                                              ) : (
+                                                group.is_invited ? (
+                                                  <Button variant="secondary" size="sm">Invited</Button>
+                                                ) : (
+                                                  <Button variant="primary" size="sm" onClick={group_id => this.handleInvite(group.group_id)}>Invite</Button>
+                                                )
+                                              )
+                                            }
+                                          </div>
+                                        </CardFooter>
+                                      )
+                                    })
+                                  )
+                                }
+                              </Card>                              
+                            </Modal>
                           </Col>
                         </Row>
                       </Form>
@@ -241,74 +318,6 @@ class ProfileContainer extends Component {
       </Container>
     )
   }
-}
-
-function Invite(receiver) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => {
-    setShow(false);
-  }
-
-  const handleShow = () => {
-    setShow(true);
-  }
-
-  const handleInvite = (group_id) => {
-    console.log(receiver.receiver.user);
-    axios.post("/api/invites/",
-      {user_id: receiver.receiver.user.id, group_id: group_id});
-    window.location.reload(false);
-  }
-
-  return (
-    <React.Fragment>
-      <Button variant="primary" onClick={handleShow}>
-        Invite to group
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>List group</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row>
-            { receiver.receiver.groups_can_be_invited.length === 0 ? (
-                "~~~Only Admin Can Invite People To Group~~~"
-              ) : (
-                receiver.receiver.groups_can_be_invited.map( group => {
-                  return (
-                    <Row key={group.id}>
-                      <Col xs="9">
-                        {group.group_name}
-                      </Col>
-                      <Col xs="3">
-                        { group.is_joined ? (
-                            <Button variant="success" size="sm">Joined</Button>
-                          ) : (
-                            group.is_invited ? (
-                              <Button variant="secondary" size="sm">Invited</Button>
-                            ) : (
-                              <Button variant="primary" size="sm" onClick={group_id => handleInvite(group.group_id)}>Invite</Button>
-                            )
-                          )
-                        }
-                      </Col>
-                    </Row>
-                  )
-                })
-              )
-            }
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </React.Fragment>
-  );
 }
 
 export default ProfileContainer;
