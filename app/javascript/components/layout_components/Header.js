@@ -24,7 +24,7 @@ class Header extends Component {
     event.preventDefault();
     await logout(this.state);
     this.props.dpLogoutUserSuccess();
-    this.props.history.push("/");
+    this.props.history.push({pathname: "/", state: {message: "Signout successfully"}})
   }
 
   handleReceive = response => {

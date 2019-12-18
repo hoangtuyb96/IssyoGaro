@@ -2,18 +2,22 @@ import React, { Component } from "react";
 import { Container, Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { userSigninFetch } from '../../redux/signin'
+import { Snackbar } from "../../snackbar";
 
 class SigninContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      error: ""
     }
 
   this.handleChange = this.handleChange.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  snackbarRef = React.createRef();
 
   handleChange(event) {
     this.setState({
@@ -21,15 +25,34 @@ class SigninContainer extends Component {
     });
   }
 
+  handleError = message => {
+    if (message === 401) {
+      this.setState({error: "Invalid email or password"});
+    } else {
+      this.props.history.push({pathname: "/", state: {message: "Signin successfully"}})
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
-    this.props.userSigninFetch(this.state);
-    this.props.history.push("/");
+    const loginUser = this.props.userSigninFetch(this.state, this.handleError);
   }
 
   render() {
     return (
       <Container>
+      <Snackbar ref = {this.snackbarRef} />
+        { this.snackbarRef.current !== null ? (
+            this.state.error !== "" ? (
+              this.snackbarRef.current.openSnackBar(this.state.error),
+              this.setState({error: ""})
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )
+        }
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
@@ -59,7 +82,7 @@ class SigninContainer extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  userSigninFetch: userInfo => dispatch(userSigninFetch(userInfo))
+  userSigninFetch: (userInfo, handleError) => dispatch(userSigninFetch(userInfo, handleError))
 })
 
 export default connect(null, mapDispatchToProps)(SigninContainer)

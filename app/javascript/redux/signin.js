@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const userSigninFetch = sign_in => {
+export const userSigninFetch = (sign_in, handleError) => {
   return dispatch => {
     return axios.post("/api/sign_in", {sign_in: sign_in})
       .then(resp => {
@@ -9,9 +9,10 @@ export const userSigninFetch = sign_in => {
         localStorage.setItem("user_id", user_data.id);
         localStorage.setItem("name", user_data.name);
         dispatch(loginUser(user_data));
+        handleError(resp.status);
       })
       .catch(error => {
-        console.log(error)
+        handleError(error.response.status);
       });
   }
 }
