@@ -13,6 +13,9 @@ namespace :api, defaults: {format: "json"} do
         resources :goals do
           get "goal_progress", to: "user_goals#goal_progress"
         end
+        resources :groups, only: [] do
+          resources :chats, only: %i[index create]
+        end
       end
       resources :groups, only: %i[show create update destroy] do
         get "group_members", to: "group_members#index"

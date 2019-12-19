@@ -144,12 +144,10 @@ class HomePagesContainer extends Component {
                           }})}>
                             { group.is_joined ? (
                                 <Button size="sm" theme="dark">
-                                    <i className="far fa-bookmark mr-1" />
                                     Joined
                                 </Button>
                               ) : (
                                 <Button size="sm" theme="primary">
-                                    <i className="far fa-bookmark mr-1" />
                                     Join
                                 </Button>
                               )
