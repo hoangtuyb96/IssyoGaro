@@ -40,16 +40,19 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/notifications")
-    .then(response => {
-      this.setState({
-        notifications: response.data.data.notifications,
-        is_loading: false
+    const {isLogin} = this.props
+    if (isLogin) {
+      axios.get("/api/notifications")
+      .then(response => {
+        this.setState({
+          notifications: response.data.data.notifications,
+          is_loading: false
+        })
       })
-    })
-    .catch(error => {
-      console.log(error.response)
-    })
+      .catch(error => {
+        console.log(error.response)
+      })
+    }
   }
 
   handleAccept = invite_id => {
@@ -81,6 +84,15 @@ class Header extends Component {
 
   render() {
     const {isLogin} = this.props;
+    if (!isLogin) {
+      if (this.props.location.pathname !== "/") {
+        if (this.props.location.pathname !== "/signin") {
+          if (this.props.location.pathname !== "/signup") {
+            this.props.history.push({pathname: "/signin", state: {message: "You need to signin or signup"}})
+          }
+        }
+      }
+    }
     return (
       <Container>
         <ActionCableConsumer
