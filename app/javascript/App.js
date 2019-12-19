@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import HomePagesContainer from './components/HomePagesContainer';
+import ChatContainer from "./components/ChatContainer";
 import { Route, withRouter, Switch } from "react-router-dom";
 import Header from './components/layout_components/Header';
 import Footer from './components/layout_components/Footer';
@@ -39,6 +40,7 @@ class App extends Component {
           <Route exact path="/create_group" component={CreateGroupContainer} />
           <Route exact path="/groups/:id/" component={GroupContainer} />
           <Route exact path="/groups/:group_id/goals/" component={CreateGoalContainer} />
+          <Route exact path="/groups/:group_id/chat" component={ChatContainer} />
           <Route exact path="/goals/:id" component={ShowGoalContainer} />
           <Route exact path="/groups/:group_id/members" component={GroupMemberContainer} />
           <Route exact path="/users/:user_id/goals/:goal_id/goal_progress" component={ShowGoalByUserContainer} />

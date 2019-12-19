@@ -163,17 +163,26 @@ class GroupContainer extends Component {
                         </CardFooter>
                       ) : (
                         <CardFooter className="border-top d-flex">
-                          <div className="d-flex">
-                            <div onClick={(event) => this.handleDeleteGroup(this.props.match.params)}>
-                              <Button theme="danger" size="sm">Delete Group</Button>
-                            </div>
-                          </div>
+                          { this.state.group.current_user_role === 3 ?
+                            (
+                              <div className="d-flex">
+                                <div onClick={(event) => this.handleDeleteGroup(this.props.match.params)}>
+                                  <Button theme="danger" size="sm">Delete Group</Button>
+                                </div>
+                              </div>
+                            ) : (
+                              ""
+                            )
+                          }
                           <div className="my-auto ml-auto">
                             <div onClick={() => this.handleLeaveGroup({
                               user_group_id: this.state.group.user_group_id
                             })}>
                               <Button theme="danger" size="sm">Leave</Button>
                             </div>
+                            <Link to={"/groups/" + this.state.group.id + "/chat"}>
+                              <Button size="sm" theme="primary">Join Chat</Button>
+                            </Link>
                           </div>
                         </CardFooter>
                       )
