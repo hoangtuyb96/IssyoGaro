@@ -21,7 +21,7 @@ namespace :api, defaults: {format: "json"} do
         end
       end
       resources :user_groups, only: %i[create update destroy]
-      resources :invites, only: :create
+      resources :invites, only: %i[create update destroy]
       resources :goals, only: :show do
         get "summary", to: "summaries#create"
       end

@@ -1,4 +1,6 @@
 class Api::V1::InvitesController < Api::BaseController
+  before_action :find_object, only: %i[update destroy]
+
   def create
     if check_permission_of(params[:group_id], "admin") ||
        check_permission_of(params[:group_id], "first_admin")
@@ -9,6 +11,38 @@ class Api::V1::InvitesController < Api::BaseController
       end
     else
       require_permission
+    end
+  end
+
+  def update
+    if invite.update_attributes is_accepted: true
+      invite.notifications.take.update_attributes is_read: true
+      notifications = current_user.notifications.reverse
+      render json: {
+        messages: "Accept invitation successfully",
+        notifications: Serializers::Notifications::NotificationSerializer
+          .new(object: notifications).serializer,
+        group_id: invite.group_id
+      }, status: 200
+    else
+      render json: {
+        error: "Somethings error..."
+      }, status: 401
+    end
+  end
+
+  def destroy
+    if invite.destroy
+      notifications = current_user.notifications.reverse
+      render json: {
+        messages: "Reject successfully",
+        notifications: Serializers::Notifications::NotificationSerializer
+          .new(object: notifications).serializer
+      }, status: 200
+    else
+      render json: {
+        messages: "Somethings error..."
+      }, status: 401
     end
   end
 
