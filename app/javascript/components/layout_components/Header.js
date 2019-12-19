@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import { logout, logoutUserSuccess } from "../../redux/logout"
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { ActionCableConsumer } from "react-actioncable-provider";
-import { NavLink, Badge, Collapse, DropdownItem } from "shards-react";
+import { NavLink, Badge, Collapse, DropdownItem, Button } from "shards-react";
 import axios from "axios";
 
 class Header extends Component {
@@ -46,6 +46,33 @@ class Header extends Component {
         notifications: response.data.data.notifications,
         is_loading: false
       })
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
+  }
+
+  handleAccept = invite_id => {
+    this.setState({
+      visible: !this.state.visible
+    });
+    const acceptResponse = axios.patch("/api/invites/" + invite_id)
+    .then(response => {
+      this.setState({notifications: response.data.notifications})
+      this.props.history.push({pathname: "/groups/" + response.data.group_id, state: {message: response.data.messages}})
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
+  }
+
+  handleReject = invite_id => {
+    this.setState({
+      visible: !this.state.visible
+    });
+    const rejectResponse = axios.delete("/api/invites/" + invite_id)
+    .then(response => {
+      this.setState({notifications: response.data.notifications})
     })
     .catch(error => {
       console.log(error.response)
@@ -110,7 +137,7 @@ class Header extends Component {
                 <Collapse
                   open={this.state.visible}
                   className="dropdown-menu dropdown-menu-small"
-                  style={{left: 300, right: 250, top: 60}}
+                  style={{left: 300, right: 250, top: 60, width: 500}}
                 >
                   { this.state.is_loading ?
                     (
@@ -124,9 +151,23 @@ class Header extends Component {
                             <DropdownItem key={notification.id}>
                               <div className="notification__content">
                                 <span className="notification__category"><strong>{notification.sender_name}</strong></span>
-                                <p>
-                                  {notification.context}
-                                </p>
+                                <div className="d-flex">
+                                  <div className="d-flex">
+                                    <p>
+                                      {notification.context}
+                                    </p>
+                                  </div>
+                                  { notification.notificationable_type === "Invite" && notification.is_read === false ?
+                                    (
+                                      <div className="my-auto ml-auto">
+                                        <Button theme="primary" size="sm" onClick={invite_id => this.handleAccept(notification.notificationable_id)}>Accept</Button>
+                                        <Button theme="dark" size="sm" onClick={invite_id => this.handleReject(notification.notificationable_id)}>Reject</Button>
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )
+                                  }
+                                </div>
                               </div>
                             </DropdownItem>
                           )
