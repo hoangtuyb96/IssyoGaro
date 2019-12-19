@@ -46,7 +46,6 @@ class HomePagesContainer extends Component {
 
   render() {
     const colors = ["dark", "info", "royal-blue", "warning"]
-    console.log(this.state)
     return (
         <Container fluid className="main-content-container px-4">
         <Snackbar ref = {this.snackbarRef} />

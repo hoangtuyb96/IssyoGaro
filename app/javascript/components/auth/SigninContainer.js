@@ -26,10 +26,10 @@ class SigninContainer extends Component {
   }
 
   handleError = message => {
-    if (message === 401) {
-      this.setState({error: "Invalid email or password"});
-    } else {
+    if (message === 200) {
       this.props.history.push({pathname: "/", state: {message: "Signin successfully"}})
+    } else {
+      this.setState({error: "Invalid email or password"});
     }
   }
 
@@ -46,6 +46,13 @@ class SigninContainer extends Component {
             this.state.error !== "" ? (
               this.snackbarRef.current.openSnackBar(this.state.error),
               this.setState({error: ""})
+            ) : (
+              ""
+            ),
+
+            this.props.history.location.state !== undefined ? (
+              this.snackbarRef.current.openSnackBar(this.props.history.location.state.message),
+              this.props.history.replace({state: undefined})
             ) : (
               ""
             )

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Button, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { userSigninFetch } from '../../redux/signin'
+import { SnackBar } from "../snackbar";
 
 class SigninContainer extends Component {
   constructor(props) {
@@ -14,6 +15,8 @@ class SigninContainer extends Component {
   this.handleChange = this.handleChange.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  snackbarRef = React.createRef();
 
   handleChange(event) {
     this.setState({
@@ -30,6 +33,18 @@ class SigninContainer extends Component {
   render() {
     return (
       <Container>
+      <Snackbar ref = {this.snackbarRef} />
+        { this.snackbarRef.current !== null ? (
+            this.props.history.location.state !== undefined ? (
+              this.snackbarRef.current.openSnackBar(this.props.history.location.state.message),
+              this.props.history.replace({state: undefined})
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )
+        }
         <Form onSubmit={this.handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
