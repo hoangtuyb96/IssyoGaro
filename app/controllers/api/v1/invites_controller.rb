@@ -17,6 +17,7 @@ class Api::V1::InvitesController < Api::BaseController
   def update
     if invite.update_attributes is_accepted: true
       invite.notifications.take.update_attributes is_read: true
+      UserGroup.create(user_id: invite.receiver_id, group_id: invite.group_id)
       notifications = current_user.notifications.reverse
       render json: {
         messages: "Accept invitation successfully",
