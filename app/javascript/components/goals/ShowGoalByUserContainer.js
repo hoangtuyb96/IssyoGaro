@@ -185,7 +185,12 @@ class ShowGoalByUserContainer extends Component {
                                     (
                                       <Rating initialRating={task.progress*5} readonly />
                                     ) : (
-                                      <Rating initialRating={task.progress*5} onClick={(event, user_task_id) => this.handleRate(event, task.user_task_id)} />
+                                      new Date(task.task.end_day) < new Date() ?
+                                        (
+                                          <Rating initialRating={task.progress*5} readonly />
+                                        ) : (
+                                          <Rating initialRating={task.progress*5} onClick={(event, user_task_id) => this.handleRate(event, task.user_task_id)} />
+                                        )
                                     )
                                   }
                                 </Col>
