@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Button, Form } from "react-bootstrap";
 import { ActionCableProvider } from "react-actioncable-provider";
 import { ActionCableConsumer } from "react-actioncable-provider";
+import { Image, Transformation } from "cloudinary-react";
+import { Link } from "react-router-dom";
 import {
   Container,
   Card,
@@ -79,15 +81,38 @@ class ChatContainer extends Component {
               <CardBody>
                 { this.state.messages.map(message => {
                   return (
-                    <div className="d-flex" key={message.id}>
-                      <div className="d-flex">
-                        <strong><h5>「{message.user_name}」：</h5></strong>
-                        {message.context}
-                      </div>
-                      <div className="my-auto ml-auto">
+                    <Row style={{paddingTop: 10}}>
+                      <Col md="10">
+                        <Row>
+                          <Col md="1">
+                            { message.user_avatar === null ? (
+                                <img
+                                  className="rounded-circle"
+                                  src={ require("../default-avatar.png")}
+                                  alt="default-avatar"
+                                  width="40"
+                                />
+                              ) : (
+                                <Image className="rounded-circle" cloudName="my-stories" className="rounded-circle" publicId={message.user_avatar} alt="avatar">
+                                  <Transformation width="40" height="40" crop="scale" radios="max"/>
+                                </Image>
+                              )
+                            }
+                          </Col>
+                          <Col md="11">
+                            <Link to={`/users/${message.user_id}`}>
+                              <strong>{message.user_name}:</strong>
+                            </Link>
+                            <br />
+                            {message.context}
+                          </Col>
+                        </Row>
+                      </Col>
+
+                      <Col md="2">
                         <span>{message.created_at}</span>
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
                   )
                 })}
               </CardBody>
