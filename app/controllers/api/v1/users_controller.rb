@@ -1,22 +1,47 @@
 class Api::V1::UsersController < Api::BaseController
-  acts_as_token_authentication_handler_for User, except: :show
-  before_action :find_object, only: :show
+  acts_as_token_authentication_handler_for User, except: %i[show update]
+  before_action :find_object, only: %i[show update]
 
   def show
     render json: {
       messages: I18n.t("users.show.success"),
       data: {
         user: serializer_show_user,
+        honnin: current_user.id.eql?(params[:id].to_i) ? true : false,
         groups_can_be_invited:
           filter_group_by_admin(joined_group, managed_group_by_id)
       }
     }, status: 200
   end
 
+  def update
+    if user.update_attributes user_params
+      render json: {
+      messages: I18n.t("users.show.success"),
+      data: {
+        user: serializer_show_user,
+        honnin: current_user.id.eql?(params[:id].to_i) ? true : false,
+        groups_can_be_invited:
+          filter_group_by_admin(joined_group, managed_group_by_id)
+      }
+    }, status: 200
+    else
+      render json: {
+        messages: user.errors.messages
+      }, status: 401
+    end
+  end
+
   private
 
+  attr_reader :user
+
+  def user_params
+    params.require(:user).permit %i[name phone address hobby avatar]
+  end
+
   def serializer_show_user
-    Serializers::Users::UserSerializer.new(object: @user).serializer
+    Serializers::Users::UserSerializer.new(object: user).serializer
   end
 
   def receiver
