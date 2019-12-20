@@ -9,7 +9,7 @@ namespace :api, defaults: {format: "json"} do
 
   scope module: :v1,
     constraints: ApiConstraints.new(version:1, default: true) do
-      resources :users, only: :show do
+      resources :users, only: %i[show update] do
         resources :goals do
           get "goal_progress", to: "user_goals#goal_progress"
         end
