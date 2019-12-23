@@ -1,5 +1,5 @@
 require "rails_helper"
-require "shared_contexts/user_data"
+require "shared_contexts/base_data_test"
 
 RSpec.describe Api::V1::UsersController do
   include_context "create_user_data"
@@ -123,6 +123,68 @@ RSpec.describe Api::V1::UsersController do
 
       it "should return HTTP status code 404" do
         expect(response).to have_http_status 404
+      end
+    end
+
+    context "update user_1 profile with user_1 login state" do
+      before do
+        request.headers["IG-AUTH-TOKEN"] = user_1.authentication_token
+        patch :update, params: { id: user_1.id, user: { name: "test name" }}
+      end
+
+      it "should assign user_1" do
+        response_body = JSON.parse(response.body).to_h
+      end
+
+      it "should return HTTP status code 200" do
+        expect(response).to have_http_status 200
+      end
+    end
+
+    context "update user_1 profile with user_1 login state params missing" do
+      before do
+        request.headers["IG-AUTH-TOKEN"] = user_1.authentication_token
+        patch :update, params: { id: user_1.id, user: {} }
+      end
+
+      it "should return error messages" do
+        response_body = JSON.parse(response.body).to_h
+        expect(response_body["messages"]).to eq "Missing parameter"
+      end
+
+      it "should return HTTP status code 400" do
+        expect(response).to have_http_status 400
+      end
+    end
+
+    context "update user_1 profile without login" do
+      before do
+        patch :update, params: { id: user_1.id }
+      end
+
+      it "should return error messages" do
+        response_body = JSON.parse(response.body).to_h
+        expect(response_body["messages"]).to eq "You need to sign in or sign up before continuing."
+      end
+
+      it "should return HTTP status code 401" do
+        expect(response).to have_http_status 401
+      end
+    end
+
+    context "update user_1 profile with user_2 login state" do
+      before do
+        request.headers["IG-AUTH-TOKEN"] = user_1.authentication_token
+        patch :update, params: { id: user_2.id, user: { name: "test name"} }
+      end
+
+      it "should return error messages" do
+        response_body = JSON.parse(response.body).to_h
+        expect(response_body["messages"]).to eq "You have not permission to access"
+      end
+
+      it "should return HTTP status code 401" do
+        expect(response).to have_http_status 401
       end
     end
   end
