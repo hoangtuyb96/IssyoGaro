@@ -56,6 +56,7 @@ en:
     create:
       success: "You have joined %{group_name} group"
       joined: "You already joined %{group_name} group"
+      request_success: "You have requested to join group"
     update:
       change_permission: "Change permission successful"
     destroy:

@@ -150,17 +150,33 @@ class GroupContainer extends Component {
                         )
                       }
                     </CardBody>
-                    { (this.state.group.current_user_role === null ) ? (
-                        <CardFooter className="border-top d-flex">
-                          <div className="border-top d-flex">
-                            <div onClick={() => this.handleJoinGroup({user_group: {
-                              user_id: localStorage.getItem("user_id"),
-                              group_id: this.state.group.id
-                            }})}>
-                              <Button variant="primary" size="sm">Join</Button>
+                    { !group.is_joined ? (
+                        group.is_requested ? (
+                          <CardFooter className="border-top d-flex">
+                            <div className="d-flex">
+                              <h4>You should wait till your request gets approved by admin</h4>
                             </div>
-                          </div>
-                        </CardFooter>
+                          </CardFooter>
+                        ) : (
+                          <CardFooter className="border-top d-flex">
+                            <div className="border-top d-flex">
+                              <div onClick={() => this.handleJoinGroup({user_group: {
+                                user_id: localStorage.getItem("user_id"),
+                                group_id: this.state.group.id
+                              }})}>
+                                { group.is_public ? (
+                                  <Button size="sm" theme="primary">
+                                    Join
+                                  </Button>
+                                ) : (
+                                  <Button size="sm" theme="primary">
+                                    Request
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </CardFooter>
+                        )
                       ) : (
                         <CardFooter className="border-top d-flex">
                           { this.state.group.current_user_role === 3 ?

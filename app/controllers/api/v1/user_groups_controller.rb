@@ -84,11 +84,20 @@ class Api::V1::UserGroupsController < Api::BaseController
   end
 
   def handle_join_group
-    @user_group = UserGroup.new user_group_params
-    if user_group.save
-      join_group_successful
+    if group.is_public
+      @user_group = UserGroup.new user_group_params
+      if user_group.save
+        join_group_successful
+      else
+        join_group_fail
+      end
     else
-      join_group_fail
+      if Request.search_request(current_user.id, params[:user_group][:group_id]).blank?
+        Request.create group_id: params[:user_group][:group_id], user_id: current_user.id
+        request_success
+      else
+        requested
+      end
     end
   end
 
@@ -107,6 +116,26 @@ class Api::V1::UserGroupsController < Api::BaseController
         messages: I18n.t("user_groups.update.change_permission"),
         group: Serializers::Groups::GroupMembersSerializer
           .new(object: @group_root).serializer
+      }
+    }, status: 200
+  end
+
+  def request_success
+    render json: {
+      data: {
+        messages: I18n.t("user_groups.create.request_success"),
+        group: Serializers::Groups::GroupAllSerializer
+          .new(object: group).serializer
+      }
+    }, status: 200
+  end
+
+  def requested
+    render json: {
+      data: {
+        messages: I18n.t("user_groups.create.request_success"),
+        group: Serializers::Groups::GroupAllSerializer
+          .new(object: group).serializer
       }
     }, status: 200
   end
