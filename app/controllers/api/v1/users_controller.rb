@@ -14,20 +14,24 @@ class Api::V1::UsersController < Api::BaseController
   end
 
   def update
-    if user.update_attributes user_params
-      render json: {
-      messages: I18n.t("users.show.success"),
-      data: {
-        user: serializer_show_user,
-        honnin: current_user.id.eql?(params[:id].to_i) ? true : false,
-        groups_can_be_invited:
-          filter_group_by_admin(joined_group, managed_group_by_id)
-      }
-    }, status: 200
+    if current_user.eql? user
+      if user.update_attributes user_params
+        render json: {
+        messages: I18n.t("users.show.success"),
+        data: {
+          user: serializer_show_user,
+          honnin: current_user.id.eql?(params[:id].to_i) ? true : false,
+          groups_can_be_invited:
+            filter_group_by_admin(joined_group, managed_group_by_id)
+        }
+      }, status: 200
+      else
+        render json: {
+          messages: user.errors.messages
+        }, status: 401
+      end
     else
-      render json: {
-        messages: user.errors.messages
-      }, status: 401
+      require_permission
     end
   end
 
