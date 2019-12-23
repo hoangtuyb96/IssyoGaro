@@ -5,6 +5,12 @@ module GroupHelper
     groups_serializer = []
     groups.each do |group|
       ug = UserGroup.search_role(cur_user_id, group.id).take
+      is_requested =
+        if group.is_public
+          false
+        else
+          Request.search_request(cur_user_id, group.id).blank? ? false : true
+        end
       groups_serializer.append(
         {
           "id": group.id,
@@ -14,6 +20,7 @@ module GroupHelper
           "is_public": group.is_public,
           "category": group.category.present? ? group.category.name : nil,
           "is_joined": ug.present? ? true : false,
+          "is_requested": is_requested,
           "created_at": custom_time(group.created_at)
         }
       )
@@ -49,6 +56,12 @@ module GroupHelper
   # rubocop:disable Metrics/MethodLength
   def serializer_group(group, cur_user_id)
     ug = UserGroup.search_role(cur_user_id, group.id).take
+    is_requested =
+      if group.is_public
+        false
+      else
+        Request.search_request(cur_user_id, group.id).blank? ? false : true
+      end
     group_serializer = {
       "id": group.id,
       "name": group.name,
@@ -57,6 +70,7 @@ module GroupHelper
       "is_public": group.is_public,
       "category": group.category.present? ? group.category.name : nil,
       "is_joined": ug.present? ? true : false,
+      "is_requested": is_requested,
       "created_at": custom_time(group.created_at),
       "current_user_role": ug.present? ? ug.role : nil
     }

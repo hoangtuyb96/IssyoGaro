@@ -144,12 +144,24 @@ class HomePagesContainer extends Component {
                           }})}>
                             { group.is_joined ? (
                                 <Button size="sm" theme="dark">
-                                    Joined
+                                  Joined
                                 </Button>
                               ) : (
-                                <Button size="sm" theme="primary">
-                                    Join
-                                </Button>
+                                !group.is_requested ? (
+                                  group.is_public ? (
+                                    <Button size="sm" theme="primary">
+                                      Join
+                                    </Button>
+                                  ) : (
+                                    <Button size="sm" theme="primary">
+                                      Request
+                                    </Button>
+                                  )
+                                ) : (
+                                  <Button size="sm" theme="secondary">
+                                    Requested
+                                  </Button>
+                                )
                               )
                             }
                           </div>
