@@ -219,6 +219,11 @@ class GroupContainer extends Component {
                                   <Button size="sm" theme="dark">Members</Button>
                                 </Link>
                               </div>
+                              <div className="my-auto ml-auto">
+                                <Link to={"/groups/" + this.state.group.id + "/requests"}>
+                                  <Button size="sm" theme="dark">Requests</Button>
+                                </Link>
+                              </div>
                             </React.Fragment>
                           ) : (
                             ""

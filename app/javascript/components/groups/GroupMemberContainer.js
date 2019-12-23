@@ -56,56 +56,58 @@ class GroupMemberContainer extends Component {
             ""
             ) : (
             <React.Fragment>
-            <h1 className="list-member-title">{this.state.group.name}'s members</h1>
-            <Row>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Set Admin</th>
-              </tr>
-            </thead>
-            <tbody>
-            {this.state.group.users.map( user => {
-              return (
-                <tr key={user.user_info.id}>
-                  <td>{user.user_info.id}</td>
-                  <td><Link to={"/users/" + user.user_info.id}>{user.user_info.name}</Link></td>
-                  <td>{user.user_info.email}</td>
-                  <td>
-                    {this.getRole(user.role)}
-                  </td>
-                  <td>
-                    {
-                      (this.getRole(user.role) === "Admin") ? 
-                      ( 
-                        <Link onClick={() => this.handleChangeAdmin(user.id)}>
-                          Delete Admin
-                        </Link>
-                      ) :
-                      (
-                        (this.getRole(user.role) === "Member") ?
-                        (
-                          <Link onClick={() => this.handleChangeAdmin(user.id)}>
-                            Set Admin
-                          </Link>
-                        )
-                        :
-                        (
-                          <p>Global Admin</p>
-                        )
-                      )
-                    }
-                  </td>
-                </tr>
-              )
-            })}
-            </tbody>
-          </Table>
-        </Row>
+              <Row noGutters className="page-header py-4">
+                <PageTitle title="Requests" subtitle={this.state.group.name} md="12" className="ml-sm-auto mr-sm-auto" />
+              </Row>
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Set Admin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {this.state.group.users.map( user => {
+                    return (
+                      <tr key={user.user_info.id}>
+                        <td>{user.user_info.id}</td>
+                        <td><Link to={"/users/" + user.user_info.id}>{user.user_info.name}</Link></td>
+                        <td>{user.user_info.email}</td>
+                        <td>
+                          {this.getRole(user.role)}
+                        </td>
+                        <td>
+                          {
+                            (this.getRole(user.role) === "Admin") ? 
+                            ( 
+                              <Link onClick={() => this.handleChangeAdmin(user.id)}>
+                                Delete Admin
+                              </Link>
+                            ) :
+                            (
+                              (this.getRole(user.role) === "Member") ?
+                              (
+                                <Link onClick={() => this.handleChangeAdmin(user.id)}>
+                                  Set Admin
+                                </Link>
+                              )
+                              :
+                              (
+                                <p>Global Admin</p>
+                              )
+                            )
+                          }
+                        </td>
+                      </tr>
+                    )
+                  })}
+                  </tbody>
+                </Table>
+              </Row>
             </React.Fragment>
             )
           }
