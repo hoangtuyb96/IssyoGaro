@@ -11,6 +11,7 @@ import ProfileContainer from './components/auth/ProfileContainer';
 import CreateGroupContainer from './components/groups/CreateGroupContainer';
 import GroupContainer from './components/groups/GroupContainer';
 import GroupMemberContainer from './components/groups/GroupMemberContainer';
+import GroupRequestsContainer from './components/groups/GroupRequestsContainer';
 import CreateGoalContainer from './components/goals/CreateGoalContainer';
 import ShowGoalContainer from './components/goals/ShowGoalContainer';
 import ShowGoalByUserContainer from './components/goals/ShowGoalByUserContainer';
@@ -43,6 +44,7 @@ class App extends Component {
           <Route exact path="/groups/:group_id/chat" component={ChatContainer} />
           <Route exact path="/goals/:id" component={ShowGoalContainer} />
           <Route exact path="/groups/:group_id/members" component={GroupMemberContainer} />
+          <Route exact path="/groups/:group_id/requests" component={GroupRequestsContainer} />
           <Route exact path="/users/:user_id/goals/:goal_id/goal_progress" component={ShowGoalByUserContainer} />
           <Route exact path="/404" component={FourZeroFour} />
         </Switch>
