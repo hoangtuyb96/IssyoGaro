@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Container, Table, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import PageTitle from "../common/PageTitle";
 
 class GroupMemberContainer extends Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class GroupMemberContainer extends Component {
             ) : (
             <React.Fragment>
               <Row noGutters className="page-header py-4">
-                <PageTitle title="Requests" subtitle={this.state.group.name} md="12" className="ml-sm-auto mr-sm-auto" />
+                <PageTitle title="Member" subtitle={this.state.group.name} md="12" className="ml-sm-auto mr-sm-auto" />
               </Row>
               <Row>
                 <Table striped bordered hover>
