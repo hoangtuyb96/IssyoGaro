@@ -33,5 +33,6 @@ namespace :api, defaults: {format: "json"} do
       resources :categories, only: :index
       resources :notifications, only: :index
       get "home", to: "home_pages#index"
+      get "search", to: "search#index"
     end
 end

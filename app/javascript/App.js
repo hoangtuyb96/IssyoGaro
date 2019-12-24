@@ -15,6 +15,7 @@ import GroupRequestsContainer from './components/groups/GroupRequestsContainer';
 import CreateGoalContainer from './components/goals/CreateGoalContainer';
 import ShowGoalContainer from './components/goals/ShowGoalContainer';
 import ShowGoalByUserContainer from './components/goals/ShowGoalByUserContainer';
+import SearchContainer from './components/SearchContainer';
 import FourZeroFour from './components/errors/FourZeroFour';
 
 import axiosConfig from './axios_config';
@@ -46,6 +47,7 @@ class App extends Component {
           <Route exact path="/groups/:group_id/members" component={GroupMemberContainer} />
           <Route exact path="/groups/:group_id/requests" component={GroupRequestsContainer} />
           <Route exact path="/users/:user_id/goals/:goal_id/goal_progress" component={ShowGoalByUserContainer} />
+          <Route exact path="/search" component={SearchContainer} />
           <Route exact path="/404" component={FourZeroFour} />
         </Switch>
         <hr />
