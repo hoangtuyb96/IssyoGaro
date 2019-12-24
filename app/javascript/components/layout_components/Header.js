@@ -4,7 +4,18 @@ import { connect } from "react-redux"
 import { logout, logoutUserSuccess } from "../../redux/logout"
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { ActionCableConsumer } from "react-actioncable-provider";
-import { NavLink, Badge, Collapse, DropdownItem, Button } from "shards-react";
+import {
+  NavLink,
+  Badge,
+  Collapse,
+  DropdownItem,
+  Button,
+  Form,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  FormInput
+} from "shards-react";
 import axios from "axios";
 
 class Header extends Component {
@@ -13,6 +24,7 @@ class Header extends Component {
     this.state = {
       notifications: [],
       visible: false,
+      querry: {},
       is_loading: true
     }
 
@@ -82,6 +94,17 @@ class Header extends Component {
     })
   }
 
+  handleChangeQuerrySearch = (event) => {
+    this.setState({
+      querry: event.target.value
+    })
+  }
+
+  handleSearch = (event) => {
+    event.preventDefault()
+    this.props.history.push(`/search?q=${this.state.querry}`)
+  }
+
   render() {
     const {isLogin} = this.props;
     if (!isLogin) {
@@ -109,10 +132,21 @@ class Header extends Component {
             {!isLogin ? (
               <React.Fragment>
                 <Navbar.Collapse id="basic-navbar-nav">
-                  {/*<Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-success">Search</Button>
-                  </Form>*/}
+                  <Form className="main-navbar__search w-100 d-none d-md-flex d-lg-flex" onSubmit={this.handleSearch}>
+                    <InputGroup seamless className="ml-3">
+                      <InputGroupAddon type="prepend">
+                        <InputGroupText>
+                          <i className="fa fa-search"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <FormInput
+                        name="query"
+                        className="navbar-search"
+                        placeholder="Search for something..."
+                        onChange={this.handleChangeQuerrySearch}
+                      />
+                    </InputGroup>
+                  </Form>
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
                   <Nav className="mr-sm-2">
@@ -124,10 +158,20 @@ class Header extends Component {
             ) : (
               <React.Fragment>
                 <Navbar.Collapse id="basic-navbar-nav">
-                  {/*<Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-success">Search</Button>
-                  </Form>*/}
+                  <Form className="main-navbar__search w-100 d-none d-md-flex d-lg-flex" onSubmit={this.handleSearch}>
+                    <InputGroup seamless className="ml-3">
+                      <InputGroupAddon type="prepend">
+                        <InputGroupText>
+                          <i className="fa fa-search"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <FormInput
+                        className="navbar-search"
+                        placeholder="Search for something..."
+                        onChange={this.handleChangeQuerrySearch}
+                      />
+                    </InputGroup>
+                  </Form>
                 </Navbar.Collapse>
                 
                 <NavLink
