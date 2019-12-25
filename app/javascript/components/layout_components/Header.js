@@ -14,7 +14,9 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  FormInput
+  FormInput,
+  Row,
+  Col
 } from "shards-react";
 import axios from "axios";
 
@@ -214,27 +216,26 @@ class Header extends Component {
                       ) : (
                         this.state.notifications.map(notification => {
                           return (
-                            <DropdownItem key={notification.id}>
-                              <div className="notification__content">
-                                <span className="notification__category"><strong>{notification.sender_name}</strong></span>
-                                <div className="d-flex">
-                                  <div className="d-flex">
-                                    <p>
-                                      {notification.context}
-                                    </p>
-                                  </div>
+                            <DropdownItem key={notification.id} style={{wordWrap: 'break-word'}}>
+                              <Row>
+                                <Col md="8">
+                                  <span className="notification__category"><strong>{notification.sender_name}</strong></span>
+                                  <br /><p className="word-wrap">{notification.context}</p>
+                                </Col>
+                                <Col md="4">
                                   { notification.notificationable_type === "Invite" && notification.is_read === false ?
                                     (
                                       <div className="my-auto ml-auto">
                                         <Button theme="primary" size="sm" onClick={invite_id => this.handleAccept(notification.notificationable_id)}>Accept</Button>
+                                        <span> </span>
                                         <Button theme="dark" size="sm" onClick={invite_id => this.handleReject(notification.notificationable_id)}>Reject</Button>
                                       </div>
                                     ) : (
                                       ""
                                     )
                                   }
-                                </div>
-                              </div>
+                                </Col>
+                              </Row>
                             </DropdownItem>
                           )
                         })
