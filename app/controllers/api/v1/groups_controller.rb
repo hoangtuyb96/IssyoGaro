@@ -22,7 +22,7 @@ class Api::V1::GroupsController < Api::BaseController
 
   def update
     if UserGroup.search_role(current_user.id, group.id).take&.role.equal? 3
-      if group.update_attributes group_params
+      if group.update_attributes update_group_params
         action_successfully "update"
       else
         action_fail
@@ -52,6 +52,10 @@ class Api::V1::GroupsController < Api::BaseController
     params.require(:group).permit Group::ATTRIBUTES_PARAMS
   end
 
+  def update_group_params
+    params.require(:group).permit %i[description is_public cover]
+  end
+
   def create_user_group
     Groups::CreateUserGroupService.new(
       user_id: current_user.id,
@@ -61,6 +65,8 @@ class Api::V1::GroupsController < Api::BaseController
   end
 
   def action_successfully(action)
+    create_notification
+    send_notification
     render json: {
       messages: I18n.t("groups." + action + ".success"),
       data: {
@@ -80,5 +86,22 @@ class Api::V1::GroupsController < Api::BaseController
     render json: {
       messages: group.errors.messages
     }, status: 401
+  end
+
+  def create_notification
+    group.users.each do |user|
+      Notification.create user_id: user.id,
+        sender_id: current_user.id,
+        notificationable_type: "Group",
+        notificationable_id: group.id,
+        target_id: params[:id],
+        context: group.name + " 's information has changed"
+    end
+  end
+
+  def send_notification
+    Groups::SendNotificationsService.new(
+      users: group.users
+    ).perform
   end
 end
