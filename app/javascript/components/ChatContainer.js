@@ -49,6 +49,7 @@ class ChatContainer extends Component {
     axios.post("/api/users/" + localStorage.getItem("user_id") + "/groups/" + this.props.match.params.group_id + "/chats", {chat: {context: this.state.message}})
     .then(response => {
       this.setState({
+        message: "",
         messages: response.data.chats
       })
     })
@@ -124,6 +125,7 @@ class ChatContainer extends Component {
                         type="text"
                         placeholder="Say Hi! to everyone..."
                         name="message"
+                        value={this.state.message}
                         onChange={this.handleChange}
                       />
                     </Col>
