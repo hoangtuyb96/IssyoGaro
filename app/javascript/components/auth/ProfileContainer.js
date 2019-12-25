@@ -93,7 +93,7 @@ class ProfileContainer extends Component {
 
   handleInvite = (group_id) => {
     axios.post("/api/invites/",
-      {user_id: this.state.user.id, group_id: group_id});
+      {user_id: this.state.id, group_id: group_id});
     window.location.reload(false);
   }
 

@@ -18,11 +18,12 @@ class Api::V1::InvitesController < Api::BaseController
     if invite.update_attributes is_accepted: true
       invite.notifications.take.update_attributes is_read: true
       UserGroup.create(user_id: invite.receiver_id, group_id: invite.group_id)
-      notifications = current_user.notifications.reverse
+      notifications = current_user.notifications
       render json: {
         messages: "Accept invitation successfully",
+        unread_count: notifications.where(is_read: false).count,
         notifications: Serializers::Notifications::NotificationSerializer
-          .new(object: notifications).serializer,
+          .new(object: notifications.reverse).serializer,
         group_id: invite.group_id
       }, status: 200
     else
@@ -34,11 +35,12 @@ class Api::V1::InvitesController < Api::BaseController
 
   def destroy
     if invite.destroy
-      notifications = current_user.notifications.reverse
+      notifications = current_user.notifications
       render json: {
         messages: "Reject successfully",
+        unread_count: notifications.where(is_read: false).count,
         notifications: Serializers::Notifications::NotificationSerializer
-          .new(object: notifications).serializer
+          .new(object: notifications.reverse).serializer
       }, status: 200
     else
       render json: {

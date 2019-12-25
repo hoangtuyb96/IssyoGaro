@@ -23,6 +23,7 @@ class Header extends Component {
     super(props)
     this.state = {
       notifications: [],
+      unread_count: "",
       visible: false,
       querry: {},
       is_loading: true
@@ -41,7 +42,8 @@ class Header extends Component {
 
   handleReceive = response => {
     this.setState({
-      notifications: response.notifications
+      notifications: response.notifications,
+      unread_count: response.unread_count
     })
   }
 
@@ -58,6 +60,7 @@ class Header extends Component {
       .then(response => {
         this.setState({
           notifications: response.data.data.notifications,
+          unread_count: response.data.data.unread_count,
           is_loading: false
         })
       })
@@ -73,7 +76,11 @@ class Header extends Component {
     });
     const acceptResponse = axios.patch("/api/invites/" + invite_id)
     .then(response => {
-      this.setState({notifications: response.data.notifications})
+      console.log(response)
+      this.setState({
+        notifications: response.data.notifications,
+        unread_count: response.data.unread_count
+      })
       this.props.history.push({pathname: "/groups/" + response.data.group_id, state: {message: response.data.messages}})
     })
     .catch(error => {
@@ -87,7 +94,10 @@ class Header extends Component {
     });
     const rejectResponse = axios.delete("/api/invites/" + invite_id)
     .then(response => {
-      this.setState({notifications: response.data.notifications})
+      this.setState({
+        notifications: response.data.notifications,
+        unread_count: response.data.unread_count
+      })
     })
     .catch(error => {
       console.log(error.response)
@@ -185,7 +195,7 @@ class Header extends Component {
                       ) :
                       (
                         <Badge pill theme="danger">
-                          {this.state.notifications.length}
+                          {this.state.unread_count}
                         </Badge>
                       )
                     }
