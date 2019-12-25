@@ -374,34 +374,46 @@ class GroupContainer extends Component {
                           'You can see all goals when join group'
                         ) : (
                           <Row>
-                          {group_state.goals.map((goal, idx) => (
-                            <Col lg="6" key={idx}>
-                              <Card small className="card-post mb-4">
-                                <CardBody>
-                                  <Link to={"/goals/" + goal.id}>
-                                    <h5 className="card-title">{goal.name}</h5>
-                                    <p className="card-text text-muted">{goal.description === null ? ("No description") : (goal.description)}</p>
-                                  </Link>
-                                </CardBody>
-                                <CardFooter className="border-top d-flex">
-                                  <div className="d-flex">
-                                    <b>Start day</b>
-                                  </div>
-                                  <div className="my-auto ml-auto">
-                                    {goal.start_day}
-                                  </div>
-                                </CardFooter>
-                                <CardFooter className="d-flex">
-                                  <div className="d-flex">
-                                    <b>End day</b>
-                                  </div>
-                                  <div className="my-auto ml-auto">
-                                    {goal.end_day}
-                                  </div>
-                                </CardFooter>
-                              </Card>
-                            </Col>
-                          ))}
+                          {group_state.goals.length === 0 ?
+                            (
+                              <Col lg="12">
+                                <Card>
+                                  <CardBody>
+                                    Create new goal and achieve it!!!
+                                  </CardBody>
+                                </Card>
+                              </Col>
+                            ) : (
+                              group_state.goals.map((goal, idx) => (
+                                <Col lg="6" key={idx}>
+                                  <Card small className="card-post mb-4">
+                                    <CardBody>
+                                      <Link to={"/goals/" + goal.id}>
+                                        <h5 className="card-title">{goal.name}</h5>
+                                        <p className="card-text text-muted">{goal.description === null ? ("No description") : (goal.description)}</p>
+                                      </Link>
+                                    </CardBody>
+                                    <CardFooter className="border-top d-flex">
+                                      <div className="d-flex">
+                                        <b>Start day</b>
+                                      </div>
+                                      <div className="my-auto ml-auto">
+                                        {goal.start_day}
+                                      </div>
+                                    </CardFooter>
+                                    <CardFooter className="d-flex">
+                                      <div className="d-flex">
+                                        <b>End day</b>
+                                      </div>
+                                      <div className="my-auto ml-auto">
+                                        {goal.end_day}
+                                      </div>
+                                    </CardFooter>
+                                  </Card>
+                                </Col>
+                              ))
+                            )
+                          }
                         </Row>
                         )
                       )
