@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import { logout, logoutUserSuccess } from "../../redux/logout"
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { ActionCableConsumer } from "react-actioncable-provider";
+import { Link } from "react-router-dom";
 import {
   NavLink,
   Badge,
@@ -216,27 +217,41 @@ class Header extends Component {
                         ) : (
                           this.state.notifications.map(notification => {
                             return (
-                              <DropdownItem key={notification.id} style={{whiteSpace: 'pre-wrap'}}>
-                                <Row>
-                                  <Col md="8">
-                                    <span className="notification__category"><strong>{notification.sender_name}</strong></span>
-                                    <br /><p className="word-wrap">{notification.context}</p>
-                                  </Col>
-                                  <Col md="4">
-                                    { notification.notificationable_type === "Invite" && notification.is_read === false ?
-                                      (
-                                        <div className="my-auto ml-auto">
-                                          <Button theme="primary" size="sm" onClick={invite_id => this.handleAccept(notification.notificationable_id)}>Accept</Button>
-                                          <span> </span>
-                                          <Button theme="dark" size="sm" onClick={invite_id => this.handleReject(notification.notificationable_id)}>Reject</Button>
-                                        </div>
-                                      ) : (
-                                        ""
-                                      )
-                                    }
-                                  </Col>
-                                </Row>
-                              </DropdownItem>
+                              notification.notificationable_type === "Group" ?
+                              (
+                                <Link to={"/groups/" + notification.notificationable_id}>
+                                <DropdownItem key={notification.id} style={{whiteSpace: 'pre-wrap'}}>
+                                  <Row>
+                                    <Col md="8">
+                                      <span className="notification__category"><strong>{notification.sender_name}</strong></span>
+                                      <br /><p className="word-wrap">{notification.context}</p>
+                                    </Col>
+                                  </Row>
+                                </DropdownItem>
+                                </Link>
+                              ) : (
+                                <DropdownItem key={notification.id} style={{whiteSpace: 'pre-wrap'}}>
+                                  <Row>
+                                    <Col md="8">
+                                      <span className="notification__category"><strong>{notification.sender_name}</strong></span>
+                                      <br /><p className="word-wrap">{notification.context}</p>
+                                    </Col>
+                                    <Col md="4">
+                                      { notification.notificationable_type === "Invite" && notification.is_read === false ?
+                                        (
+                                          <div className="my-auto ml-auto">
+                                            <Button theme="primary" size="sm" onClick={invite_id => this.handleAccept(notification.notificationable_id)}>Accept</Button>
+                                            <span> </span>
+                                            <Button theme="dark" size="sm" onClick={invite_id => this.handleReject(notification.notificationable_id)}>Reject</Button>
+                                          </div>
+                                        ) : (
+                                          ""
+                                        )
+                                      }
+                                    </Col>
+                                  </Row>
+                                </DropdownItem>
+                              )
                             )
                           })
                         )
