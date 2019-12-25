@@ -78,7 +78,7 @@ class ChatContainer extends Component {
               <CardHeader className="border-bottom text-center"  style={{backgroundColor: "white"}}>
                 <h3>{this.state.group.name}</h3>
               </CardHeader>
-              <CardBody>
+              <CardBody style={{height: 600, overflowY: 'scroll'}}>
                 { this.state.messages.map(message => {
                   return (
                     <Row style={{paddingTop: 10}}>

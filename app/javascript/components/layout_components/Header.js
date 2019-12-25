@@ -187,6 +187,7 @@ class Header extends Component {
                 </Navbar.Collapse>
                 
                 <NavLink
+                  style={{position: "relative"}}
                   className="nav-link-icon text-center"
                   onClick={this.toggleNotifications}
                 >
@@ -201,52 +202,52 @@ class Header extends Component {
                         </Badge>
                       )
                     }
-                </NavLink>
-                <Collapse
-                  open={this.state.visible}
-                  className="dropdown-menu dropdown-menu-small"
-                  style={{left: 300, right: 250, top: 60, width: 500}}
-                >
-                  { this.state.is_loading ?
-                    (
-                      "Loading..."
-                    ) : (
-                      this.state.notifications.length === 0 ? (
-                        "No notifications"
+                  <Collapse
+                    open={this.state.visible}
+                    className="dropdown-menu dropdown-menu-small"
+                    style={{right: 0, top: 40, left: "auto", width: 500, maxHeight: 600, overflowY: "scroll"}}
+                  >
+                    { this.state.is_loading ?
+                      (
+                        "Loading..."
                       ) : (
-                        this.state.notifications.map(notification => {
-                          return (
-                            <DropdownItem key={notification.id} style={{wordWrap: 'break-word'}}>
-                              <Row>
-                                <Col md="8">
-                                  <span className="notification__category"><strong>{notification.sender_name}</strong></span>
-                                  <br /><p className="word-wrap">{notification.context}</p>
-                                </Col>
-                                <Col md="4">
-                                  { notification.notificationable_type === "Invite" && notification.is_read === false ?
-                                    (
-                                      <div className="my-auto ml-auto">
-                                        <Button theme="primary" size="sm" onClick={invite_id => this.handleAccept(notification.notificationable_id)}>Accept</Button>
-                                        <span> </span>
-                                        <Button theme="dark" size="sm" onClick={invite_id => this.handleReject(notification.notificationable_id)}>Reject</Button>
-                                      </div>
-                                    ) : (
-                                      ""
-                                    )
-                                  }
-                                </Col>
-                              </Row>
-                            </DropdownItem>
-                          )
-                        })
+                        this.state.notifications.length === 0 ? (
+                          <p style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>No notifications</p>
+                        ) : (
+                          this.state.notifications.map(notification => {
+                            return (
+                              <DropdownItem key={notification.id} style={{whiteSpace: 'pre-wrap'}}>
+                                <Row>
+                                  <Col md="8">
+                                    <span className="notification__category"><strong>{notification.sender_name}</strong></span>
+                                    <br /><p className="word-wrap">{notification.context}</p>
+                                  </Col>
+                                  <Col md="4">
+                                    { notification.notificationable_type === "Invite" && notification.is_read === false ?
+                                      (
+                                        <div className="my-auto ml-auto">
+                                          <Button theme="primary" size="sm" onClick={invite_id => this.handleAccept(notification.notificationable_id)}>Accept</Button>
+                                          <span> </span>
+                                          <Button theme="dark" size="sm" onClick={invite_id => this.handleReject(notification.notificationable_id)}>Reject</Button>
+                                        </div>
+                                      ) : (
+                                        ""
+                                      )
+                                    }
+                                  </Col>
+                                </Row>
+                              </DropdownItem>
+                            )
+                          })
+                        )
                       )
-                    )
-                  }
-                  
-                  <DropdownItem className="notification__all text-center">
-                    View all Notifications
-                  </DropdownItem>
-                </Collapse>
+                    }
+                    
+                    <DropdownItem className="notification__all text-center">
+                      View all Notifications
+                    </DropdownItem>
+                  </Collapse>
+                </NavLink>
                 <Nav className="mr-sm-2">
                   <Nav.Link href="/create_group">Create Group</Nav.Link>
                   <NavDropdown title={ this.props.auth.currentUser.name } id="basic-nav-dropdown">
