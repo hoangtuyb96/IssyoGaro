@@ -103,10 +103,12 @@ class Api::V1::InvitesController < Api::BaseController
 
   def send_notification
     notifications = User.find_by(id: params[:user_id]).notifications
+    unread_count = notifications.where(is_read: false).count
     NotificationJob.perform_now(
       params[:user_id],
       Serializers::Notifications::NotificationSerializer
-        .new(object: notifications).serializer
+        .new(object: notifications).serializer,
+      unread_count
     )
   end
 end

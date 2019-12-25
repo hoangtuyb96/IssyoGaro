@@ -5,10 +5,12 @@ class Groups::SendNotificationsService
 
   def perform
     @users.each do |user|
+      unread_count = user.notifications.where(is_read: false).count
       NotificationGroupJob.perform_now(
         user.id,
         Serializers::Notifications::NotificationSerializer
-        .new(object: user.notifications).serializer
+        .new(object: user.notifications).serializer,
+        unread_count
       )
     end
   end

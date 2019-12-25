@@ -147,9 +147,10 @@ class GroupContainer extends Component {
       })
     })
     .catch(error => {
-      console.log(error.response)
-      if (error.response.status === 404) {
-        this.props.history.push("/404")
+      if (error.response !== undefined) {
+        if (error.response.status === 404) {
+          this.props.history.push("/404")
+        }
       }
     });
   }
